@@ -102,11 +102,16 @@
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
         
-        /* --- Top Search Bar --- */
-        .top-search-bar { display: flex; align-items: center; background-color: var(--card-bg); border-radius: var(--border-radius); padding: 10px 15px; box-shadow: var(--shadow); cursor: pointer; transition: all 0.3s; }
-        .top-search-bar:hover { box-shadow: var(--shadow-hover); }
+        /* --- Top Search Bar (MODIFIED) --- */
+        .top-search-bar { 
+            display: flex; align-items: center; background-color: var(--card-bg); 
+            border-radius: var(--border-radius); padding: 10px 15px; 
+            box-shadow: var(--shadow); cursor: pointer; transition: all 0.3s;
+            border: 2px solid var(--primary-color); /* Added blue border */
+        }
+        .top-search-bar:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
         .top-search-bar input { border: none; outline: none; background: transparent; width: 100%; font-size: 1rem; color: var(--text-color); pointer-events: none; }
-        .top-search-bar .search-icon { color: var(--text-color); opacity: 0.6; margin-right: 10px; }
+        .top-search-bar .search-icon { color: var(--primary-color); opacity: 0.8; margin-right: 10px; }
         .top-search-bar .search-icon svg { width: 22px; height: 22px; }
 
         /* --- Generic Carousel Styles --- */
@@ -223,7 +228,6 @@
         .detail-title { font-size: 1.2rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1; }
         .detail-content { padding: 20px; }
         
-        /* FIX 1 & 2: Responsive & Clickable Images in Content Areas */
         .detail-content img,
         #page-about-us img,
         .notification-link + img {
@@ -232,7 +236,7 @@
             display: block;
             border-radius: var(--border-radius);
             margin-bottom: 20px;
-            cursor: pointer; /* Add cursor to indicate it's clickable */
+            cursor: pointer;
         }
 
         .detail-description { white-space: pre-wrap; line-height: 1.6; }
@@ -250,8 +254,25 @@
         .menu-credit { text-align: center; font-size: 0.8rem; color: #999; margin-top: 15px; }
         
         .empty-state { text-align: center; padding: 50px 20px; color: #777; }
+        /* Search Page (MODIFIED) */
         .search-page { padding: 20px; }
-        .search-bar { width: 100%; padding: 15px; font-size: 1rem; border: 1px solid #ddd; border-radius: var(--border-radius); margin-bottom: 20px; background-color: var(--card-bg); color: var(--text-color); }
+        .search-bar { 
+            width: 100%; 
+            padding: 15px; 
+            font-size: 1.1rem; 
+            border: 2px solid var(--primary-color); 
+            border-radius: var(--border-radius); 
+            margin-bottom: 25px; 
+            background-color: var(--card-bg); 
+            color: var(--text-color); 
+            box-shadow: none;
+            transition: box-shadow 0.3s;
+        }
+        .search-bar:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 82, 212, 0.25);
+        }
+
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-weight: 500; margin-bottom: 5px; }
@@ -328,18 +349,18 @@
         .quiz-question-text { font-size: 1.1rem; font-weight: 500; margin-bottom: 20px; }
         .quiz-options { list-style: none; }
         .quiz-option { 
-            position: relative; /* Added for pseudo-element positioning */
-            display: flex; /* Added for alignment */
-            align-items: center; /* Added for alignment */
+            position: relative; 
+            display: flex;
+            align-items: center;
             padding: 15px; 
-            padding-right: 40px; /* Space for the icon */
+            padding-right: 40px; 
             border: 1px solid #ddd; 
             border-radius: 8px; 
             margin-bottom: 10px; 
             cursor: pointer; 
             transition: background-color 0.2s; 
         }
-        .quiz-option::after { /* NEW: Pseudo-element for icons */
+        .quiz-option::after {
             content: '';
             position: absolute;
             right: 15px;
@@ -356,7 +377,7 @@
             pointer-events: none; 
         }
         .quiz-option.correct::after {
-            content: '✔'; /* Correct icon */
+            content: '✔';
             color: white;
         }
         .quiz-option.incorrect { 
@@ -366,7 +387,7 @@
             pointer-events: none; 
         }
         .quiz-option.incorrect::after {
-            content: '✖'; /* Incorrect icon */
+            content: '✖';
             color: white;
         }
         .quiz-navigation { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
@@ -394,6 +415,44 @@
         .feedback-card { display: flex; justify-content: space-between; align-items: center; }
         .feedback-text { font-size: 1rem; font-weight: 500; }
         .feedback-emoji { font-size: 1.5rem; }
+
+        /* --- NEW: Quiz Ranks Page --- */
+        #page-quiz-ranks { padding: 0; }
+        #quiz-ranks-container { padding: 20px; }
+        .your-rank-highlight {
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-hover);
+        }
+        .your-rank-highlight p { margin: 0; font-size: 1rem; }
+        .your-rank-highlight .rank-number { font-size: 2.5rem; font-weight: 700; }
+        .quiz-rank-list-item {
+            display: grid;
+            grid-template-columns: 40px 1fr 60px;
+            align-items: center;
+            padding: 10px 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        .quiz-rank-list-item.current-user-rank {
+            border: 2px solid var(--primary-color);
+            background-color: #eef2ff;
+        }
+        /* Top 3 Highlighting */
+        .quiz-rank-list-item.rank-1 { background: linear-gradient(90deg, #fff1c2, #ffffff); }
+        .quiz-rank-list-item.rank-2 { background: linear-gradient(90deg, #dce0e3, #ffffff); }
+        .quiz-rank-list-item.rank-3 { background: linear-gradient(90deg, #f7d7c6, #ffffff); }
+        .quiz-rank-number { font-size: 1rem; font-weight: 700; text-align: center; color: #555; }
+        .quiz-rank-user-name { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 10px;}
+        .quiz-rank-score { font-size: 1rem; font-weight: 600; color: var(--primary-color); text-align: right; }
+
 
         .pdf-list { padding: 20px; display: grid; gap: 15px; }
         .pdf-item { display: flex; flex-direction: column; padding: 20px; background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow); }
@@ -436,10 +495,10 @@
         .content-action-btn:hover { background-color: #e9ecef; }
         .content-action-btn svg { width: 16px; height: 16px; }
         .content-action-btn.icon { padding: 8px; border: 1px solid #ddd; }
-        .content-action-btn.downloaded { background-color: var(--success-color); color: white; border-color: var(--success-color); }
+        .content-action-btn.downloaded { background-color: var(--success-color); color: white; border-color: var(--success-color); pointer-events: none; }
         .content-action-btn.downloaded svg { color: white !important; }
-        .content-complete-btn { position: absolute; top: 15px; right: 15px; width: 28px; height: 28px; border-radius: 50%; border: 2px solid #ccc; background: white; transition: all 0.3s; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-        .content-complete-btn.completed { background-color: var(--success-color); border-color: var(--success-color); color: white; }
+        .content-complete-btn { position: absolute; top: 15px; right: 15px; width: 28px; height: 28px; border-radius: 50%; border: 2px solid #ccc; background: white; transition: all 0.3s; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; }
+        .content-complete-btn.completed { background-color: var(--success-color); border-color: var(--success-color); color: white; pointer-events: none; }
 
         #page-leaderboard { padding-bottom: 20px; }
         .leaderboard-level-showcase { padding: 20px 0; background: var(--card-bg); position: relative; display: flex; justify-content: center; align-items: center; height: 150px; overflow: hidden; }
@@ -513,18 +572,17 @@
         .video-content-section { padding: 0; }
         .comment-list, .question-list { display: flex; flex-direction: column; gap: 10px; padding-bottom: 15px; }
 
-        /* FIX 5: Chat UI Density Improvements */
         .comment-item, .question-item {
             display: flex;
-            gap: 8px; /* Reduced gap */
-            padding: 8px; /* Reduced padding */
+            gap: 8px;
+            padding: 8px;
             background-color: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .question-item { border-left: 4px solid var(--error-color); }
         .comment-avatar, .question-avatar {
-            width: 28px; /* Smaller avatar */
+            width: 28px;
             height: 28px;
             border-radius: 50%;
             background-color: var(--primary-color);
@@ -533,7 +591,7 @@
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: 0.75rem; /* Smaller initial */
+            font-size: 0.75rem;
             flex-shrink: 0;
         }
         .comment-avatar img, .question-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
@@ -546,26 +604,21 @@
         }
         .comment-author, .question-author {
             font-weight: 600;
-            font-size: 0.8rem; /* Smaller username */
+            font-size: 0.8rem;
         }
         .comment-text, .question-text {
             line-height: 1.4;
-            font-size: 0.85rem; /* Smaller message text */
+            font-size: 0.85rem;
             white-space: pre-wrap;
             word-break: break-word;
         }
         .comment-meta, .question-meta {
-            font-size: 0.65rem; /* Smaller timestamp */
+            font-size: 0.65rem;
             color: #888;
-            margin-top: 0; /* Removed top margin */
+            margin-top: 0;
         }
         .delete-comment-btn, .delete-question-btn { cursor: pointer; color: var(--error-color); font-weight: 500; margin-left: 10px; }
         
-        /* Download Page Item */
-        .download-item { display: flex; flex-direction: column; gap: 10px; padding: 15px; background: var(--card-bg); border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 15px; }
-        .download-item h4 { font-size: 1.1rem; font-weight: 600; width: 100%; padding-bottom: 10px; border-bottom: 1px solid #eee; }
-        .download-item-actions { display: flex; gap: 10px; }
-
         /* PDF Viewer Page Styles */
         #page-pdf-viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; background-color: var(--bg-color); flex-direction: column; }
         #page-pdf-viewer.active { display: flex; }
@@ -680,7 +733,6 @@
             color: white;
             scrollbar-width: none;
         }
-        /* FIXED: Remove focus outline */
         .chat-form textarea:focus {
             outline: none;
             box-shadow: none;
@@ -691,68 +743,44 @@
         .chat-form #user-chat-send-btn svg { fill: white; margin-left: 2px; }
         .chat-subtext { font-size: 0.8rem; font-weight: 500; color: #aebac1; text-align: center; padding-top: 5px; }
         
-        /* --- Offline Screen Styles --- */
-        #offline-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg-color);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            padding: 20px;
-            text-align: center;
-        }
-        #offline-screen.hidden {
-            display: none;
-        }
-        .offline-icon {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 30px;
-        }
-        .offline-content h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 20px 0 10px;
-            color: var(--text-color);
-        }
-        .offline-content p {
-            color: #777;
-            margin-bottom: 30px;
-            max-width: 300px;
-        }
-        .offline-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            width: 100%;
-            max-width: 350px;
-        }
-        .offline-buttons .btn {
-            flex: 1;
-            padding: 12px;
-        }
-        .offline-buttons .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        /* --- STUDY PAGE STYLES (NEW) --- */
+        /* --- STUDY PAGE STYLES (MODIFIED) --- */
         #study-page-content {
             display: flex;
             flex-direction: column;
-            min-height: calc(100vh - 58px); /* 58px is header height */
+            min-height: calc(100vh - 58px);
         }
         .study-main-area {
             flex-grow: 1;
         }
-
+        #page-study .detail-header { /* NEW for XP */
+            justify-content: space-between;
+        }
+        #header-xp-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 20px;
+            background-color: #f0f0f0;
+        }
+        .xp-icon {
+            width: 24px;
+            height: 26px;
+            background-color: var(--xp-color);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+        .xp-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--xp-color);
+        }
         #page-study .study-header {
             padding: 15px 20px;
             background-color: var(--card-bg);
@@ -872,6 +900,61 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .learning-shortcut-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* --- NEW: DASHBOARD PAGE --- */
+        #page-dashboard { padding-bottom: 20px; }
+        .dashboard-grid {
+            padding: 20px;
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr;
+        }
+        .dashboard-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+        }
+        .dashboard-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .dashboard-card-header .icon {
+            font-size: 1.5rem;
+        }
+        .dashboard-card-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .dashboard-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .dashboard-stat .label {
+            font-size: 1rem;
+            color: #555;
+        }
+        .dashboard-stat .value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .dashboard-stat .value span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #777;
         }
 
         /* --- LIVE CLASS PAGE STYLES (FIXED) --- */
@@ -955,43 +1038,6 @@
         <div class="splash-spinner"></div>
     </div>
 
-    <div id="offline-screen" class="hidden">
-        <div class="offline-content">
-            <div class="offline-icon">
-                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="100" cy="100" r="80" fill="none" stroke="#e0e7ff" stroke-width="2"></circle>
-                    <circle cx="100" cy="100" r="60" fill="none" stroke="#e0e7ff" stroke-width="2"></circle>
-                    <path d="M100 25 L130 150 H70 Z" fill="#4f46e5" fill-opacity="0.2"></path>
-                    <path d="M100 25 L130 150 H70 Z" fill="none" stroke="#4f46e5" stroke-width="3"></path>
-                    <path d="M85 110 H115" stroke="#4f46e5" stroke-width="3"></path>
-                    <path d="M78 130 H122" stroke="#4f46e5" stroke-width="3"></path>
-                    <circle cx="100" cy="65" r="25" fill="#4f46e5"></circle>
-                    <path d="M92 65 A15 15 0 0 1 100 57" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"></path>
-                    <path d="M86 65 A22 22 0 0 1 100 50" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"></path>
-                    <circle cx="100" cy="71" r="2" fill="white"></circle>
-                    <g transform="translate(108 55)">
-                      <circle cx="0" cy="0" r="8" fill="#e74c3c"></circle>
-                      <path d="M-4 -4 L4 4 M-4 4 L4 -4" stroke="white" stroke-width="2" stroke-linecap="round"></path>
-                    </g>
-                    <g fill="#e74c3c" opacity="0.8">
-                      <path d="M150 50 l-5 5 l5 -5 l5 5 l-5-5 l5 5z" transform="rotate(45 150 50)"></path>
-                      <path d="M60 160 l-5 5 l5 -5 l5 5 l-5-5 l5 5z" transform="rotate(45 60 160)"></path>
-                    </g>
-                    <g fill="#4f46e5" opacity="0.8">
-                      <circle cx="55" cy="55" r="5"></circle>
-                      <circle cx="145" cy="145" r="5"></circle>
-                    </g>
-                </svg>
-            </div>
-            <h2>Seems that you're offline</h2>
-            <p>Kindly check your internet connection and retry</p>
-            <div class="offline-buttons">
-                <button id="offline-downloads-btn" class="btn btn-secondary">My Downloads</button>
-                <button id="offline-retry-btn" class="btn btn-primary">Retry</button>
-            </div>
-        </div>
-    </div>
-
     <div id="auth-container" style="display: none;">
         <div class="auth-nav">
             <button class="auth-nav-btn" data-page="page-auth-signup">Sign Up</button>
@@ -1063,10 +1109,11 @@
             </div>
             <ul class="menu-nav" id="menu-nav-links">
                 <li><a href="#home" class="menu-nav-item" data-page="page-home"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"></path></svg><span>Home</span></a></li>
+                <!-- NEW: Live Class menu item -->
+                <li><a href="#study" class="menu-nav-item" data-page="page-study"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"></path></svg><span>Live Class</span></a></li>
                 <li><a href="#leaderboard" class="menu-nav-item" data-page="page-leaderboard"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M16 11V3H8v8l4-4 4 4zm-4 10c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"></path></svg><span>Leaderboard</span></a></li>
                 <li><a href="#profile" class="menu-nav-item" data-page="page-profile"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg><span>Profile</span></a></li>
                 <li><a href="#my-courses" class="menu-nav-item" data-page="page-my-courses"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"></path></svg><span>My Courses</span></a></li>
-                <li><a href="#downloads" class="menu-nav-item" data-page="page-downloads"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></svg><span>Downloads</span></a></li>
                 <li><a href="#mcq" class="menu-nav-item" data-page="page-mcq"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"></path></svg><span>MCQ</span></a></li>
                 <li><a href="#pdf" class="menu-nav-item" data-page="page-pdf"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zM18 14H13V7h5v7zM4 6H2v14c0 1.1.9 2 2 2h14v-2-H4V6z"></path></svg><span>PDF</span></a></li>
                 <li><a href="#test" class="menu-nav-item" data-page="page-test"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z"></path></svg><span>Test</span></a></li>
@@ -1143,9 +1190,27 @@
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path></svg>
                     </button>
                     <h2 class="detail-title">Study</h2>
+                    <!-- NEW: XP Display in header -->
+                    <div id="header-xp-display">
+                        <div class="xp-icon">XP</div>
+                        <span class="xp-value">0</span>
+                    </div>
                 </header>
                 <div id="study-page-content">
                     <!-- Content will be rendered by JS -->
+                </div>
+            </div>
+
+            <!-- NEW: Dashboard Page -->
+            <div id="page-dashboard" class="page">
+                <header class="detail-header">
+                    <button class="back-btn" onclick="AppController.navigateBack()">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path></svg>
+                    </button>
+                    <h2 class="detail-title">My Dashboard</h2>
+                </header>
+                <div id="dashboard-content">
+                    <!-- Dashboard cards will be rendered here -->
                 </div>
             </div>
 
@@ -1177,18 +1242,6 @@
              <div id="page-about-us" class="page"></div>
              <!-- NEW: Contact Us Page Container -->
              <div id="page-contact-us" class="page"></div>
-            
-            <div id="page-downloads" class="page">
-                 <header class="detail-header">
-                    <button class="back-btn" onclick="AppController.navigateBack()">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path></svg>
-                    </button>
-                    <h2 class="detail-title">Downloads</h2>
-                </header>
-                <div style="padding: 20px;" id="downloads-list-container">
-                    <!-- Downloaded items will be rendered here -->
-                </div>
-            </div>
             
             <div id="page-notifications" class="page"></div>
             
@@ -1235,6 +1288,19 @@
                 </header>
                 <div id="quiz-result-content-container">
                     <!-- Quiz results will be rendered here by JS -->
+                </div>
+            </div>
+
+            <!-- NEW QUIZ RANKS PAGE -->
+            <div id="page-quiz-ranks" class="page">
+                 <header class="detail-header">
+                    <button class="back-btn" onclick="AppController.navigateBack()">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path></svg>
+                    </button>
+                    <h2 id="quiz-ranks-title" class="detail-title">Test Ranks</h2>
+                </header>
+                <div id="quiz-ranks-container">
+                    <!-- Quiz ranks will be rendered here -->
                 </div>
             </div>
             
@@ -1359,11 +1425,10 @@
                                 <div class="action-icon-wrapper"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zM18 14H13V7h5v7zM4 6H2v14c0 1.1.9 2 2 2h14v-2-H4V6z"></path></svg></div>
                                 <span>View PDF</span>
                             </div>
-                            <div id="video-download-btn" class="action-circle">
+                            <a href="#" id="video-download-btn" class="action-circle download-btn" download>
                                 <div class="action-icon-wrapper"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></svg></div>
-                                <span class="download-tick">✓</span>
                                 <span>Download</span>
-                            </div>
+                            </a>
                         </div>
                         <form id="video-input-form" class="video-input-bar hidden">
                             <textarea id="video-input" rows="1" required></textarea>
@@ -1411,7 +1476,7 @@
             <a href="#home" class="nav-item active" data-page="page-home"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"></path></svg><span>Home</span></a>
             <a href="#my-courses" class="nav-item" data-page="page-my-courses"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"></path></svg><span>My Courses</span></a>
             <a href="#search" class="nav-item" data-page="page-search"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg><span>Search</span></a>
-            <a href="#profile" class="nav-item" data-page="page-profile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84 c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.48c-0.59,0.24-1.13,0.57-1.62,0.94l-2.39-0.96c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.97 C2.62,9.18,2.67,9.44,2.85,9.58l2.03,1.58C4.84,11.4,4.82,11.7,4.82,12s0.02,0.6,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39,0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.67 c0.04,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.67c0.59-0.24,1.13-0.57,1.62,0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.5c-1.93,0-3.5-1.57-3.5-3.5 s1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5S13.93,15.5,12,15.5z" ></path></svg><span>Settings</span></a>
+            <a href="#profile" class="nav-item" data-page="page-profile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84 c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.48c-0.59,0.24-1.13,0.57-1.62,0.94l-2.39-0.96c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.97 C2.62,9.18,2.67,9.44,2.85,9.58l2.03,1.58C4.84,11.4,4.82,11.7,4.82,12s0.02,0.6,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39,0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.67 c0.04,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.67c0.59-0.24,1.13-0.57,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.5c-1.93,0-3.5-1.57-3.5-3.5 s1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5S13.93,15.5,12,15.5z" ></path></svg><span>Settings</span></a>
         </nav>
         <div id="modal-container"></div>
         <div id="detail-page" class="detail-page-container"><header class="detail-header"><button class="back-btn" id="detail-back-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path></svg></button><h2 id="detail-title" class="detail-title"></h2></header><div id="detail-content" class="detail-content"></div><div id="detail-footer" class="detail-footer"></div></div>
@@ -1426,48 +1491,21 @@
     </div>
 
 <script>
-    // यह सुनिश्चित करता है कि पूरा जावास्क्रिप्ट कोड तभी चले जब HTML पेज पूरी तरह से तैयार हो।
-    // यही ब्लैंक स्क्रीन की समस्या का समाधान है।
+    const firebaseConfig = {
+        apiKey: "AIzaSyDJitQrBXpT4nnG1uBDrgBhRf05JNrO0yI",
+        authDomain: "apna-study-apna-group.firebaseapp.com",
+        databaseURL: "https://apna-study-apna-group-default-rtdb.firebaseio.com",
+        projectId: "apna-study-apna-group",
+        storageBucket: "apna-study-apna-group.appspot.com",
+        messagingSenderId: "875071837925",
+        appId: "1:875071837925:web:101e87217ca8c39fb6a60c"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+    const storage = firebase.storage();
+
     document.addEventListener('DOMContentLoaded', () => {
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJitQrBXpT4nnG1uBDrgBhRf05JNrO0yI",
-            authDomain: "apna-study-apna-group.firebaseapp.com",
-            databaseURL: "https://apna-study-apna-group-default-rtdb.firebaseio.com",
-            projectId: "apna-study-apna-group",
-            storageBucket: "apna-study-apna-group.appspot.com",
-            messagingSenderId: "875071837925",
-            appId: "1:875071837925:web:101e87217ca8c39fb6a60c"
-        };
-        
-        // सुरक्षित रूप से Firebase को इनिशियलाइज़ करें
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-
-        const auth = firebase.auth();
-        const db = firebase.database();
-        const storage = firebase.storage();
-
-        // --- START: 100% WORKING SERVICE WORKER REGISTRATION ---
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful');
-                        
-                        let refreshing;
-                        navigator.serviceWorker.addEventListener('controllerchange', () => {
-                            if (refreshing) return;
-                            window.location.reload();
-                            refreshing = true;
-                        });
-                    })
-                    .catch(err => console.log('ServiceWorker registration failed: ', err));
-            });
-        }
-        // --- END: 100% WORKING SERVICE WORKER REGISTRATION ---
-
         const AppState = {
             data: { courses: null, settings: {}, mcqs: [], tests: [], pdfs: [], leaderboard: [], schedules: {} },
             session: { currentUser: null, userData: null },
@@ -1480,7 +1518,7 @@
                 liveStatusInterval: null,
                 currentLiveSchedule: null
             },
-            quiz: { type: null, questions: [], currentIndex: 0, userAnswers: {}, isSubmitted: {}, source: null, id: null }
+            quiz: { type: null, questions: [], currentIndex: 0, userAnswers: {}, isSubmitted: {}, source: null, id: null, title: null }
         };
 
         const UI = {
@@ -1730,7 +1768,6 @@
             },
             showDetailPage(course) { const d = document.getElementById('detail-page'); document.getElementById('detail-title').textContent = course.title; const isEnrolled = AppState.session.userData?.enrolledCourses?.[course.id]; let btn = ''; if (isEnrolled) { btn = `<button class="btn btn-secondary lets-study-btn" data-id="${course.id}">Let's Study</button>`; } else if (course.type === 'free') { btn = `<button class="btn btn-primary enroll-btn" data-id="${course.id}">Enroll Free</button>`; } else { btn = `<button class="btn btn-primary buy-now-btn" data-id="${course.id}">Buy Now</button>`; } document.getElementById('detail-content').innerHTML = `<img src="${course.thumbnail}" alt="${course.title}"><p class="detail-description">${course.description}</p>`; document.getElementById('detail-footer').innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center;"><span class="price ${course.type}" style="font-size:1.4rem;">${course.type === 'free' ? 'Free' : `₹${course.price}`}</span>${btn}</div>`; d.classList.add('visible'); },
             hideDetailPage() { document.getElementById('detail-page').classList.remove('visible'); },
-            // --- पहला बदलाव: ऑनलाइन PDF 'View' को ठीक करने के लिए ---
             renderPdfs(list) {
                 const container = document.getElementById('pdf-list-container');
                 const currentFilter = AppState.ui.filters.pdf || 'all';
@@ -1738,14 +1775,14 @@
                 if (currentFilter !== 'all') {
                     filteredList = list.filter(item => item.class == currentFilter);
                 }
+                 const downloadedPdfs = JSON.parse(localStorage.getItem('downloadedPdfs')) || {};
 
                 if (!filteredList || filteredList.length === 0) {
                     container.innerHTML = `<div class="empty-state">No PDFs found for the selected filter.</div>`;
                     return;
                 }
-                
                 container.innerHTML = `<div class="pdf-list">${filteredList.map(pdf => {
-                    // अब "View" बटन पर pdf-viewer-btn क्लास है जो ऐप में PDF खोलेगा
+                    const isDownloaded = downloadedPdfs[pdf.id];
                     return `
                     <div class="pdf-item">
                         <div class="pdf-item-info">
@@ -1754,9 +1791,11 @@
                         </div>
                         <div class="pdf-item-actions">
                             <button class="btn btn-secondary pdf-viewer-btn" data-url="${pdf.url}" data-title="${pdf.title}">View</button>
-                            <button class="btn btn-primary download-btn" data-item='${JSON.stringify(pdf)}'>Download</button>
+                            <a href="${pdf.url}" download="${pdf.title}.pdf" class="btn btn-primary download-btn ${isDownloaded ? 'downloaded' : ''}" data-item='${JSON.stringify(pdf)}'>
+                                ${isDownloaded ? 'Downloaded' : 'Download'}
+                            </a>
                         </div>
-                    </div>`;
+                    </div>`
                 }).join('')}
                 </div>`;
             },
@@ -1868,7 +1907,8 @@
                     if (!contentList || contentList.length === 0) { listContainer.innerHTML = `<div class="empty-state">No content found in this chapter.</div>`; return; }
                     
                     const completedLectures = AppState.session.userData.completedLectures || {};
-                    const downloads = JSON.parse(localStorage.getItem('offlineDownloads')) || [];
+                    const downloadedPdfs = JSON.parse(localStorage.getItem('downloadedPdfs')) || {};
+                    const downloadedVideos = JSON.parse(localStorage.getItem('downloadedVideos')) || {};
 
                     listContainer.innerHTML = contentList.map(item => {
                         
@@ -1894,10 +1934,15 @@
                             </div>`;
                         }
 
-                        // --- Video and PDF rendering logic remains the same ---
+                        // --- Video and PDF rendering logic ---
                         const isCompleted = completedLectures[item.id];
-                        const isDownloaded = downloads.some(d => d.id === item.id);
-                        
+                        let isDownloaded = false;
+                        if(item.type === 'pdf') {
+                            isDownloaded = downloadedPdfs[item.id];
+                        } else if (item.type === 'video') {
+                             isDownloaded = downloadedVideos[item.id];
+                        }
+
                         let mainThumbnailHtml = '';
                         const defaultIcon = item.type === 'pdf'
                             ? `<svg viewBox="0 0 24 24" fill="currentColor" style="width: 40px; height: 40px; color: #888;"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zM18 14H13V7h5v7zM4 6H2v14c0 1.1.9 2 2 2h14v-2-H4V6z"></path></svg>`
@@ -1906,15 +1951,17 @@
                         if (item.thumbnail) {
                             mainThumbnailHtml = `<div class="content-thumbnail"><img src="${item.thumbnail}" alt="thumbnail">${item.duration ? `<div class="content-time-overlay">${item.duration}</div>` : ''}</div>`;
                         } else {
-                            mainThumbnailHtml = `<div class="content-thumbnail" style="display:flex; align-items:center; justify-content:center;">${item.type === 'test' ? '📝' : defaultIcon}</div>`;
+                            mainThumbnailHtml = `<div class="content-thumbnail" style="display:flex; align-items:center; justify-content:center;">${defaultIcon}</div>`;
                         }
                         
-                        const completionButtonHtml = item.type === 'video' ? `<div class="content-complete-btn ${isCompleted ? 'completed' : ''}" title="Status">${isCompleted ? '✔' : ''}</div>` : '';
+                        const completionButtonHtml = item.type === 'video' ? `<div class="content-complete-btn ${isCompleted ? 'completed' : ''}" data-lecture-id="${item.id}" title="Status">${isCompleted ? '✔' : ''}</div>` : '';
                         
                         const watchAction = item.type === 'video'
                             ? `<button class="content-action-btn watch video-watch-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg> Watch</button>`
                             : `<button class="content-action-btn watch pdf-viewer-btn" data-url="${item.url}" data-title="${item.title}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-2v-2h2v2zm0-4h-2v-2h2v2zm-4-4h-2V6h2v2z"></path></svg> View PDF</button>`;
 
+                        const downloadFilename = item.type === 'video' ? `${item.title}.mp4` : `${item.title}.pdf`;
+                        const downloadAction = `<a href="${item.url}" download="${downloadFilename}" class="content-action-btn icon download-btn ${isDownloaded ? 'downloaded' : ''}" title="Download" data-item='${JSON.stringify(item)}'><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></svg></a>`;
                         const notesAction = item.notesUrl ? `<button class="content-action-btn icon pdf-viewer-btn" title="View Notes" data-url="${item.notesUrl}" data-title="Notes: ${item.title}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-2v-2h2v2zm0-4h-2v-2h2v2zm-4-4h-2V6h2v2z"></path></svg></button>` : '';
                         
                         return `
@@ -1927,7 +1974,7 @@
                                         <h4 class="content-title">${item.title}</h4>
                                         <div class="content-actions">
                                             ${watchAction}
-                                            <button class="content-action-btn icon download-btn ${isDownloaded ? 'downloaded' : ''}" title="Download Offline" data-item='${JSON.stringify(item)}'><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></svg></button>
+                                            ${downloadAction}
                                             ${notesAction}
                                         </div>
                                     </div>
@@ -2065,11 +2112,19 @@
                 
                 const xpGained = correctAnswers * 2;
                 if (xpGained > 0 && AppState.session.currentUser) {
-                    const user = AppState.session.userData;
-                    const currentXp = user.xp || 0;
-                    const newXp = currentXp + xpGained;
-                    const uid = AppState.session.currentUser.uid;
-                    db.ref(`users/${uid}/xp`).set(newXp);
+                    AppController.updateUserXP(xpGained);
+                }
+
+                // Store the result for ranking
+                if (AppState.session.currentUser) {
+                    const resultData = {
+                        userId: AppState.session.currentUser.uid,
+                        userName: AppState.session.userData.name,
+                        score: correctAnswers,
+                        total: totalQuestions,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    };
+                    db.ref(`quizResults/${AppState.quiz.id}/${AppState.session.currentUser.uid}`).set(resultData);
                 }
 
                 const correctPercentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
@@ -2136,11 +2191,18 @@
                     <span class="feedback-text">${feedback.text}</span>
                     <span class="feedback-emoji">${feedback.emoji}</span>
                 </div>
-
-                <button class="btn btn-primary" onclick="${backButtonAction}" style="width:100%; margin-top:15px;">Back to List</button>
+                
+                <div class="card-buttons" style="margin-top:15px;">
+                    <button class="btn btn-secondary" onclick="${backButtonAction}" style="flex:1;">Back to List</button>
+                    <button class="btn btn-primary" id="view-quiz-ranks-btn" style="flex:1;">Your Rank</button>
+                </div>
                 `;
                 
                 AppController.navigateToPage('page-quiz-result');
+
+                document.getElementById('view-quiz-ranks-btn').addEventListener('click', () => {
+                    AppController.showQuizRanksPage(AppState.quiz.id, AppState.quiz.title);
+                });
 
                 const xpMessageEl = document.getElementById('xp-gain-message');
                 if (xpMessageEl) {
@@ -2155,6 +2217,58 @@
                         }, 500); 
                     }, 3000); 
                 }
+            },
+            renderQuizRanksPage(quizId, quizTitle) {
+                const container = document.getElementById('quiz-ranks-container');
+                document.getElementById('quiz-ranks-title').textContent = `${quizTitle} Ranks`;
+                container.innerHTML = `<div class="empty-state">Loading ranks...</div>`;
+
+                db.ref(`quizResults/${quizId}`).orderByChild('score').limitToLast(50).once('value', snapshot => {
+                    if (!snapshot.exists()) {
+                        container.innerHTML = `<div class="empty-state">No one has taken this test yet.</div>`;
+                        return;
+                    }
+
+                    const results = AppController.firebaseObjectToArray(snapshot.val());
+                    const sortedResults = results.sort((a, b) => b.score - a.score);
+                    const currentUserId = AppState.session.currentUser.uid;
+                    let currentUserRank = -1;
+                    let currentUserData = null;
+
+                    const rankListHtml = sortedResults.map((result, index) => {
+                        const rank = index + 1;
+                        const isCurrentUser = result.userId === currentUserId;
+                        if (isCurrentUser) {
+                            currentUserRank = rank;
+                            currentUserData = result;
+                        }
+                        let rankClass = `quiz-rank-list-item rank-${rank}`;
+                        if(isCurrentUser) {
+                            rankClass += ' current-user-rank';
+                        }
+                        return `
+                        <div class="${rankClass}">
+                            <div class="quiz-rank-number">${rank}</div>
+                            <div class="quiz-rank-user-name">${result.userName}</div>
+                            <div class="quiz-rank-score">${result.score}/${result.total}</div>
+                        </div>
+                        `;
+                    }).join('');
+
+                    let userRankHtml = '';
+                    if (currentUserRank !== -1 && currentUserData) {
+                        userRankHtml = `
+                        <div class="your-rank-highlight">
+                            <p>Your Rank</p>
+                            <div class="rank-number">#${currentUserRank}</div>
+                            <p>Score: ${currentUserData.score}/${currentUserData.total}</p>
+                        </div>`;
+                    } else {
+                        userRankHtml = `<div class="empty-state" style="padding: 20px;">You haven't taken this test yet.</div>`;
+                    }
+                    
+                    container.innerHTML = userRankHtml + rankListHtml;
+                });
             },
             getLevelBadgeDetails(level) { const colors = ['#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#f1c40f', '#1abc9c', '#e67e22', '#34495e', '#d35400', '#2980b9', '#27ae60', '#8e44ad', '#c0392b', '#16a085', '#f39c12', '#7f8c8d', '#000000', '#ff69b4', '#6a3805', '#4a148c']; const color = colors[level - 1] || colors[colors.length - 1]; return { color, icon: `${level}` }; },
             renderLevelCarousel(currentLevel = 1) {
@@ -2332,6 +2446,7 @@
                 
                 UI.updateMenuHeader();
                 UI.updateNotificationIcon();
+                this.renderHeaderXP(); // Update XP display
 
                 const oldTheme = oldData?.settings?.darkMode;
                 const newTheme = newData?.settings?.darkMode;
@@ -2342,18 +2457,15 @@
                 const activePage = document.querySelector('.page.active');
                 if (activePage) {
                     const pageId = activePage.id;
-                    if (pageId === 'page-home' || pageId === 'page-my-courses' || pageId === 'page-profile' || pageId === 'page-leaderboard') {
+                    if (['page-home', 'page-my-courses', 'page-profile', 'page-leaderboard', 'page-study'].includes(pageId)) {
                         this.loadPageContent(pageId);
                     }
                 }
             },
 
             checkOnlineStatus() {
-                const offlineScreen = document.getElementById('offline-screen');
                 if (!navigator.onLine) {
-                    offlineScreen.classList.remove('hidden');
-                } else {
-                    offlineScreen.classList.add('hidden');
+                   // You can optionally show a small toast/banner here if needed
                 }
             },
             loadInitialData() {
@@ -2385,45 +2497,16 @@
                     UI.updateMenuHeader();
                     UI.applySettings();
                     UI.updateNotificationIcon();
+                    this.renderHeaderXP();
                     const activePage = document.querySelector('#main-app-container .page.active');
                     if(activePage) this.loadPageContent(activePage.id);
                 } else {
                     UI.applySettings();
                 }
             },
-            // --- दूसरा बदलाव ---
             bindEvents() {
                 window.addEventListener('online', this.checkOnlineStatus);
                 window.addEventListener('offline', this.checkOnlineStatus);
-                
-                document.getElementById('offline-retry-btn').addEventListener('click', () => {
-                    window.location.reload();
-                });
-
-                // --- यहाँ मुख्य बदलाव किया गया है ---
-                document.getElementById('offline-downloads-btn').addEventListener('click', () => {
-                    document.getElementById('offline-screen').classList.add('hidden');
-                    // ऐप के मुख्य हिस्सों को दिखाएँ
-                    document.getElementById('auth-container').style.display = 'none';
-                    document.getElementById('main-app-container').style.display = 'block';
-                    
-                    // सभी पेज से 'active' क्लास हटाएँ
-                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                    
-                    const downloadsPage = document.getElementById('page-downloads');
-                    if (downloadsPage) {
-                        downloadsPage.classList.add('active');
-                        // अब यह फंक्शन बिना लोडिंग के तुरंत चलेगा और ऑफ़लाइन काम करेगा
-                        this.renderDownloadsPage(); 
-                    }
-                    
-                    // हेडर और फुटर को छिपाएँ ताकि सिर्फ डाउनलोड पेज दिखे
-                    const header = document.querySelector('.app-header');
-                    const footer = document.querySelector('.bottom-nav');
-                    if(header) header.style.display = 'none';
-                    if(footer) footer.style.display = 'none';
-                    document.getElementById('main-app-container').style.paddingBottom = '0';
-                });
 
                 window.addEventListener('pagehide', () => {
                     const activePage = document.querySelector('.page.active');
@@ -2436,6 +2519,7 @@
                     this.navigateToPage('page-search');
                 });
                 document.getElementById('study-btn').addEventListener('click', () => this.navigateToPage('page-study'));
+                 document.getElementById('header-xp-display').addEventListener('click', () => this.navigateToPage('page-leaderboard'));
                 
                 document.body.addEventListener('submit', (e) => {
                     e.preventDefault(); 
@@ -2476,7 +2560,19 @@
                     if (link) {
                         e.preventDefault();
                         if (link.id === 'share-app-btn') {
-                            if (navigator.share) navigator.share({ title: 'Apna Study App', text: 'Check out this amazing study app!', url: window.location.href }); else alert("Share feature not supported.");
+                            const shareData = {
+                                title: 'ASAG – Apna Study Apna Group',
+                                text: '🎓 ASAG – Apna Study Apna Group: Smart Study, Easy Success!',
+                                url: 'https://www.appcreator24.com/app3803365-q7jx9n'
+                            };
+                            if (navigator.share && navigator.canShare(shareData)) {
+                                navigator.share(shareData).catch(err => console.error("Share failed:", err));
+                            } else {
+                                // Fallback for browsers that don't support share
+                                navigator.clipboard.writeText(shareData.text + " " + shareData.url)
+                                    .then(() => alert("App link copied to clipboard!"))
+                                    .catch(() => alert("Could not share or copy the link."));
+                            }
                         } else {
                             this.navigateToPage(link.dataset.page);
                         }
@@ -2507,7 +2603,7 @@
                     if (e.target.tagName === 'IMG' && contentArea && !e.target.closest('.course-thumbnail')) {
                         e.preventDefault();
                         this.showImageViewer(e.target.src);
-                        return; // Stop further processing for this click
+                        return;
                     }
 
                     if (!e.target.closest('#pdf-options-btn')) {
@@ -2532,17 +2628,22 @@
                     const watchBtn = e.target.closest('.video-watch-btn');
                     if (watchBtn) { const itemData = JSON.parse(watchBtn.closest('.content-card-wrapper').dataset.item); this.showVideoPlayerPage(itemData); return; }
                     
-                    // New: Handle start course test button
                     const startCourseTestBtn = e.target.closest('.start-course-test-btn');
                     if (startCourseTestBtn) {
                         const itemWrapper = startCourseTestBtn.closest('.content-card-wrapper');
                         const itemData = JSON.parse(itemWrapper.dataset.item);
-                        this.startQuiz('test', itemWrapper.dataset.id, 'course', itemData.questions);
+                        this.startQuiz('test', itemWrapper.dataset.id, 'course', itemData.questions, itemData.title);
                         return;
                     }
 
                     const downloadBtn = e.target.closest('.download-btn');
-                    if (downloadBtn) { const item = JSON.parse(downloadBtn.dataset.item); this.downloadContentOffline(item, downloadBtn); return; }
+                    if (downloadBtn) {
+                        e.preventDefault();
+                        const item = JSON.parse(downloadBtn.dataset.item);
+                        this.handleDirectDownload(item, downloadBtn);
+                        return;
+                    }
+
                     const courseCard = e.target.closest('.course-card');
                     const courseId = courseCard?.dataset.id || e.target.dataset.id;
                     if (e.target.classList.contains('enroll-btn')) this.enroll(courseId);
@@ -2565,18 +2666,30 @@
                     const subjectItem = e.target.closest('.subject-accordion-item'); if(subjectItem) { const { courseId, subjectId, subjectTitle } = subjectItem.dataset; this.showChaptersPage(courseId, subjectId, subjectTitle); }
                     const chapterItem = e.target.closest('.chapter-card'); if(chapterItem) { const { courseId, subjectId, chapterId, chapterTitle } = chapterItem.dataset; this.showLecturesPage(courseId, subjectId, chapterId, chapterTitle); }
                     if (e.target.classList.contains('password-toggle')) { const input = e.target.previousElementSibling; input.type = input.type === 'password' ? 'text' : 'password'; e.target.textContent = input.type === 'password' ? '👁️' : '🙈'; }
+                    
                     const learningShortcut = e.target.closest('.learning-shortcut-btn');
-                    if (learningShortcut) { e.preventDefault(); this.navigateToPage(learningShortcut.dataset.page); }
-                    if (!AppState.quiz.type || document.getElementById('page-quiz-result').classList.contains('active')) return; 
-                    const t = e.target; 
-                    const qIndex = AppState.quiz.currentIndex; 
-                    const q = AppState.quiz.questions[qIndex]; 
-                    if (!q) return; 
-                    if (t.classList.contains('quiz-option') && !AppState.quiz.isSubmitted[qIndex]) { AppState.quiz.userAnswers[qIndex] = t.dataset.option; UI.renderQuiz(); } 
-                    if (t.id === 'quiz-submit-btn') this.submitQuizAnswer(); 
-                    if (t.id === 'quiz-next-btn') this.navigateQuiz(1); 
-                    if (t.id === 'quiz-prev-btn') this.navigateQuiz(-1); 
-                    if (t.id === 'quiz-finish-btn') UI.renderQuizResult();
+                    if (learningShortcut) {
+                         e.preventDefault();
+                         const page = learningShortcut.dataset.page;
+                         if(page === 'page-dashboard') {
+                            this.navigateToPage('page-dashboard', true, { batchId: AppState.ui.selectedStudyBatchId });
+                         } else {
+                            this.navigateToPage(page);
+                         }
+                    }
+                    
+                    const quizPageActive = AppState.quiz.type && !document.getElementById('page-quiz-result').classList.contains('active') && !document.getElementById('page-quiz-ranks').classList.contains('active');
+                    if (quizPageActive) {
+                        const t = e.target; 
+                        const qIndex = AppState.quiz.currentIndex; 
+                        const q = AppState.quiz.questions[qIndex]; 
+                        if (!q) return; 
+                        if (t.classList.contains('quiz-option') && !AppState.quiz.isSubmitted[qIndex]) { AppState.quiz.userAnswers[qIndex] = t.dataset.option; UI.renderQuiz(); } 
+                        if (t.id === 'quiz-submit-btn') this.submitQuizAnswer(); 
+                        if (t.id === 'quiz-next-btn') this.navigateQuiz(1); 
+                        if (t.id === 'quiz-prev-btn') this.navigateQuiz(-1); 
+                        if (t.id === 'quiz-finish-btn') UI.renderQuizResult();
+                    }
                 });
                 
                 document.getElementById('detail-back-btn').addEventListener('click', UI.hideDetailPage);
@@ -2592,7 +2705,6 @@
                 document.getElementById('video-input-form').addEventListener('submit', this.handleVideoInputSubmit);
                 document.getElementById('video-comments-btn').addEventListener('click', () => this.setVideoPlayerMode('comments'));
                 document.getElementById('video-ask-question-btn').addEventListener('click', () => this.setVideoPlayerMode('questions'));
-                document.getElementById('video-download-btn').addEventListener('click', e => { const item = AppState.ui.currentVideoItem; this.downloadContentOffline(item, e.currentTarget); });
                 
                 const filterTypes = ['mcq', 'pdf', 'test'];
                 filterTypes.forEach(type => {
@@ -2605,18 +2717,6 @@
                             if (e.target.classList.contains('filter-bar-select')) { this.updateFilter(type, e.target.value); }
                         });
                     }
-                });
-                
-                document.getElementById('downloads-list-container').addEventListener('click', e => {
-                   const viewBtn = e.target.closest('.view-download-btn');
-                   if (viewBtn) {
-                       const item = JSON.parse(viewBtn.closest('.download-item').dataset.item);
-                       if (item.type === 'video') {
-                           this.showVideoPlayerPage(item);
-                       } else if (item.type === 'pdf') {
-                           this.showPdfViewer(item.url, item.title);
-                       }
-                   }
                 });
                 
                 // --- NEW: Listeners for Image Viewer Modal ---
@@ -2895,7 +2995,6 @@
                     textarea.style.height = 'auto';
                     textarea.style.height = (textarea.scrollHeight) + 'px';
                 });
-                // FIX 3: Scroll input into view on focus
                 textarea.addEventListener('focus', () => {
                     setTimeout(() => {
                         const formContainer = document.querySelector('#page-contact-us .chat-form-container');
@@ -3258,10 +3357,27 @@
             markLectureAsComplete(lectureId) {
                 if (!lectureId || !AppState.session.currentUser) return;
                 const user = AppState.session.userData;
-                if (user.completedLectures && user.completedLectures[lectureId]) return;
+                const completedLectures = user.completedLectures || {};
+                
+                if (completedLectures[lectureId]) return; // Already completed, no XP gain
+
+                this.updateUserXP(50); // Give 50 XP for completing a video
                 const updates = {};
                 updates[`/users/${AppState.session.currentUser.uid}/completedLectures/${lectureId}`] = true;
                 db.ref().update(updates);
+                
+                const checkmark = document.querySelector(`.content-complete-btn[data-lecture-id="${lectureId}"]`);
+                if(checkmark) {
+                    checkmark.classList.add('completed');
+                    checkmark.innerHTML = '✔';
+                }
+            },
+            updateUserXP(xpToAdd) {
+                if (!AppState.session.currentUser || xpToAdd <= 0) return;
+                const user = AppState.session.userData;
+                const currentXp = user.xp || 0;
+                const newXp = currentXp + xpToAdd;
+                db.ref(`users/${AppState.session.currentUser.uid}/xp`).set(newXp);
             },
             startXpCounter() {
                 if (AppState.ui.xpInterval) clearInterval(AppState.ui.xpInterval);
@@ -3271,10 +3387,7 @@
                         this.stopXpCounter();
                         return;
                     }
-                    const user = AppState.session.userData;
-                    const currentXp = user.xp || 0;
-                    const newXp = currentXp + 2; // 2 XP per minute
-                    db.ref(`users/${AppState.session.currentUser.uid}/xp`).set(newXp);
+                    this.updateUserXP(2); // 2 XP per minute
                 }, 60000);
             },
             stopXpCounter() {
@@ -3292,7 +3405,7 @@
                     this.navigateToPage('page-home', false);
                 }
             },
-            navigateToPage(pageId, addToHistory = true) {
+            navigateToPage(pageId, addToHistory = true, params = {}) {
                 if (AppState.ui.liveStatusInterval) {
                     clearInterval(AppState.ui.liveStatusInterval);
                     AppState.ui.liveStatusInterval = null;
@@ -3306,7 +3419,7 @@
                 
                 const currentPage = document.querySelector('.page.active');
                 if (currentPage && addToHistory && currentPage.id !== pageId) {
-                     if(currentPage.id !== 'page-quiz-result' && currentPage.id !== 'page-payment-gateway' && !currentPage.id.startsWith('page-mcq') && !currentPage.id.startsWith('page-test')) {
+                     if(!['page-quiz-result', 'page-quiz-ranks', 'page-payment-gateway', 'page-dashboard'].includes(currentPage.id) && !currentPage.id.startsWith('page-mcq') && !currentPage.id.startsWith('page-test')) {
                         AppState.ui.navigationHistory.push(currentPage.id);
                      }
                 }
@@ -3355,11 +3468,11 @@
                 } else {
                     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
                     document.querySelector(`.nav-item[data-page="${pageId}"]`)?.classList.add('active');
-                    this.loadPageContent(pageId);
+                    this.loadPageContent(pageId, params);
                 }
             },
-            loadPageContent(pageId) {
-                if (pageId.startsWith('page-auth-') || pageId === 'page-quiz-result' || pageId === 'page-payment-gateway' || pageId === 'page-live-class') return;
+            loadPageContent(pageId, params = {}) {
+                if (pageId.startsWith('page-auth-') || ['page-quiz-result', 'page-quiz-ranks', 'page-payment-gateway', 'page-live-class'].includes(pageId)) return;
                 
                 const filterablePages = ['page-mcq', 'page-pdf', 'page-test'];
                 if (filterablePages.includes(pageId)) {
@@ -3401,7 +3514,6 @@
                 else if (pageId === 'page-mcq') UI.renderQuizList('mcq');
                 else if (pageId === 'page-test') UI.renderQuizList('test');
                 else if (pageId === 'page-pdf') UI.renderPdfs(AppState.data.pdfs);
-                else if (pageId === 'page-downloads') this.renderDownloadsPage();
                 else if (pageId === 'page-profile') this.renderProfilePage();
                 else if (pageId === 'page-about-us') this.renderAboutUsPage();
                 else if (pageId === 'page-contact-us') this.renderUserChatInterface();
@@ -3424,6 +3536,8 @@
                     this.renderVideoPlayer();
                 } else if (pageId === 'page-study') {
                     this.renderStudyPage();
+                } else if (pageId === 'page-dashboard') {
+                    this.renderDashboard(params.batchId);
                 }
             },
             updateFilter(type, newFilter) {
@@ -3440,6 +3554,7 @@
             showBuyNowPage(courseId) { const course = AppState.data.courses.find(c => c.id === courseId); if (!course) { alert('Error: Course not found.'); return; } this.navigateToPage('page-buy-now'); UI.renderBuyNowPage(course); },
             showChaptersPage(courseId, subjectId, subjectTitle) { this.navigateToPage('page-chapters'); UI.renderChapters(courseId, subjectId, subjectTitle); },
             showLecturesPage(courseId, subjectId, chapterId, chapterTitle) { this.navigateToPage('page-lectures'); UI.renderLectures(courseId, subjectId, chapterId, chapterTitle); },
+            showQuizRanksPage(quizId, quizTitle) { this.navigateToPage('page-quiz-ranks'); UI.renderQuizRanksPage(quizId, quizTitle); },
             
             showVideoPlayerPage(item) {
                 AppState.ui.commentsToShow = 5;
@@ -3496,12 +3611,17 @@
                     pdfBtn.classList.add('hidden');
                 }
 
-                const downloads = JSON.parse(localStorage.getItem('offlineDownloads')) || [];
-                if(downloads.some(d => d.id === item.id)){
+                const downloadedVideos = JSON.parse(localStorage.getItem('downloadedVideos')) || {};
+                if(downloadedVideos[item.id]){
                     downloadBtn.classList.add('downloaded');
+                    downloadBtn.textContent = 'Downloaded';
                 } else {
                     downloadBtn.classList.remove('downloaded');
+                    downloadBtn.innerHTML = `<div class="action-icon-wrapper"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></svg></div><span>Download</span>`;
                 }
+                downloadBtn.href = item.url;
+                downloadBtn.setAttribute('download', `${item.title}.mp4`);
+                downloadBtn.dataset.item = JSON.stringify(item);
                 
                 form.classList.add('hidden');
                 document.getElementById('video-comments-btn').classList.remove('active');
@@ -3679,114 +3799,19 @@
                 }
             },
 
-            async downloadContentOffline(item, btnElement) {
-                if (btnElement.classList.contains('downloaded')) {
-                    UI.showModal("Already Downloaded", "This file is already available offline.", true);
-                    return;
-                }
+            handleDirectDownload(item, btnElement) {
                 if (!item || !item.url) return;
-                if (!('serviceWorker' in navigator) || !navigator.serviceWorker.controller) {
-                    UI.showModal("Error", "Offline functionality is not available. Please activate it by reloading the page.", true);
-                    return;
-                }
                 
-                const originalIconHTML = btnElement.innerHTML;
-                btnElement.disabled = true;
-                btnElement.innerHTML = `<svg style="width:16px; height:16px; animation: spin 1s linear infinite;" viewBox="0 0 24 24" fill="currentColor"><path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" fill="${document.documentElement.dataset.theme === 'dark' ? 'white' : 'black'}"></path></svg>`;
-
-                try {
-                    const swResponse = await this.sendMessageToSW({
-                        action: 'cache-file',
-                        url: item.url
-                    });
-                    
-                    if (swResponse.success) {
-                        let downloads = JSON.parse(localStorage.getItem('offlineDownloads')) || [];
-                        if (!downloads.find(d => d.id === item.id)) {
-                            downloads.push(item);
-                            localStorage.setItem('offlineDownloads', JSON.stringify(downloads));
-                        }
-                        btnElement.classList.add('downloaded');
-                        btnElement.innerHTML = originalIconHTML;
-                        UI.showModal("Download Complete", `'${item.title}' has been downloaded successfully.`, true);
-                        if(AppState.ui.currentVideoItem && AppState.ui.currentVideoItem.id === item.id) {
-                           document.getElementById('video-download-btn').classList.add('downloaded');
-                        }
-                    } else {
-                        throw new Error(swResponse.error || 'Service worker failed to cache file.');
-                    }
-                } catch (error) {
-                    UI.showModal("Download Failed", "Please check your connection and try again.", true);
-                    console.error('Offline download error:', error);
-                    btnElement.innerHTML = originalIconHTML;
-                } finally {
-                    btnElement.disabled = false;
+                const storageKey = item.type === 'video' ? 'downloadedVideos' : 'downloadedPdfs';
+                let downloads = JSON.parse(localStorage.getItem(storageKey)) || {};
+                
+                if (!downloads[item.id]) {
+                    downloads[item.id] = true;
+                    localStorage.setItem(storageKey, JSON.stringify(downloads));
+                    this.updateUserXP(20); // Give 20 XP for first download
+                    btnElement.classList.add('downloaded');
+                    if (btnElement.tagName === 'A') btnElement.textContent = 'Downloaded';
                 }
-            },
-
-            sendMessageToSW(msg) {
-                return new Promise((resolve) => {
-                    const messageChannel = new MessageChannel();
-                    messageChannel.port1.onmessage = event => {
-                        resolve(event.data);
-                    };
-                    navigator.serviceWorker.controller.postMessage(msg, [messageChannel.port2]);
-                });
-            },
-
-                // --- दूसरा बदलाव: ऑफ़लाइन 'My Downloads' में 'View' को ठीक करने के लिए ---
-            renderDownloadsPage() {
-                const container = document.getElementById('downloads-list-container');
-                let downloads = JSON.parse(localStorage.getItem('offlineDownloads')) || [];
-                if (downloads.length === 0) {
-                    container.innerHTML = '<div class="empty-state">You have no downloaded content.</div>';
-                    return;
-                }
-                container.innerHTML = downloads.map(item => {
-                    // अब 'View' बटन ऐप के अंदर ही वीडियो प्लेयर या PDF व्यूअर खोलेगा
-                    const viewButtonAction = item.type === 'video'
-                        ? `AppController.showVideoPlayerPage(JSON.parse(this.closest('.download-item').dataset.item))`
-                        : `AppController.showPdfViewer(JSON.parse(this.closest('.download-item').dataset.item).url, '${item.title}')`;
-
-                    return `
-                    <div class="download-item" data-item='${JSON.stringify(item)}'>
-                         <h4>${item.title}</h4>
-                         <div class="download-item-actions">
-                             <button class="btn btn-secondary" onclick="${viewButtonAction}">View</button>
-                             <button class="btn btn-danger remove-download-btn" data-id="${item.id}">Remove</button>
-                         </div>
-                    </div>`;
-                }).join('');
-
-                container.querySelectorAll('.remove-download-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        e.stopPropagation();
-                        // ... (बाकी का रिमूव वाला कोड)
-                    });
-                });
-            },
-                        const idToRemove = e.target.dataset.id;
-                        let currentDownloads = JSON.parse(localStorage.getItem('offlineDownloads')) || [];
-                        const itemToRemove = currentDownloads.find(d => d.id === idToRemove);
-                        if (!itemToRemove) return;
-
-                        const userConfirmed = await UI.showConfirmationModal(
-                            'Remove Download', 'Are you sure you want to remove this download?', 'Remove'
-                        );
-
-                        if (userConfirmed) {
-                             if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                                navigator.serviceWorker.controller.postMessage({
-                                    action: 'delete-cache',
-                                    url: itemToRemove.url
-                                });
-                            }
-                            currentDownloads = currentDownloads.filter(d => d.id !== idToRemove);
-                            localStorage.setItem('offlineDownloads', JSON.stringify(currentDownloads));
-                            this.renderDownloadsPage();
-                        }
-                    });
-                });
             },
             
             showPdfViewer(url, title = 'PDF Document') {
@@ -3798,10 +3823,10 @@
                 this.navigateToPage('page-pdf-viewer');
             },
             
-            startQuiz(type, setId, source = 'global', questions = null) {
+            startQuiz(type, setId, source = 'global', questions = null, title = '') {
                 let selectedSet;
                 if (source === 'course') {
-                    selectedSet = { id: setId, questions: AppController.firebaseObjectToArray(questions) };
+                    selectedSet = { id: setId, questions: AppController.firebaseObjectToArray(questions), title: title };
                 } else {
                     const data = type === 'mcq' ? AppState.data.mcqs : AppState.data.tests;
                     selectedSet = data.find(set => set.id === setId);
@@ -3815,8 +3840,9 @@
                     currentIndex: 0,
                     userAnswers: {},
                     isSubmitted: {},
-                    source: source, // 'global' or 'course'
-                    id: setId
+                    source: source,
+                    id: setId,
+                    title: selectedSet.title
                 }; 
                 
                 const quizPageId = `page-${type}`;
@@ -3836,8 +3862,17 @@
                 UI.renderQuiz(); 
             },
 
-            // --- NEW FUNCTIONS FOR STUDY PAGE ---
+            // --- NEW/MODIFIED FUNCTIONS FOR STUDY & DASHBOARD ---
+            renderHeaderXP() {
+                const xpDisplay = document.getElementById('header-xp-display');
+                if (xpDisplay && AppState.session.userData) {
+                    const xpValue = xpDisplay.querySelector('.xp-value');
+                    xpValue.textContent = AppState.session.userData.xp || 0;
+                }
+            },
+
             renderStudyPage() {
+                this.renderHeaderXP();
                 const container = document.getElementById('study-page-content');
                 const user = AppState.session.userData;
                 if (!user || !user.enrolledCourses || Object.keys(user.enrolledCourses).length === 0) {
@@ -3945,15 +3980,15 @@
                 }
 
                 mainAreaHtml += `
-                    <h3 class="study-section-title">My Learning</h3>
+                    <h3 class="study-section-title">My Study Zone</h3>
                     <div class="my-learning-grid">
                          <a href="#" class="learning-shortcut-btn" data-page="page-my-courses">
                             <svg fill="currentColor" viewBox="0 0 24 24" height="28px" width="28px"><path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"></path></svg>
                             <span>My Batches</span>
                          </a>
-                         <a href="#" class="learning-shortcut-btn" data-page="page-downloads">
-                             <svg fill="currentColor" viewBox="0 0 24 24" height="28px" width="28px"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></svg>
-                             <span>My Downloads</span>
+                         <a href="#" class="learning-shortcut-btn" data-page="page-dashboard">
+                             <svg fill="currentColor" viewBox="0 0 24 24" height="28px" width="28px"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"></path></svg>
+                             <span>Dashboard</span>
                          </a>
                     </div>
                 `;
@@ -3987,6 +4022,79 @@
                 }
                 
                 if(AppState.ui.liveStatusInterval) clearInterval(AppState.ui.liveStatusInterval);
+            },
+
+            async renderDashboard(batchId) {
+                const container = document.getElementById('dashboard-content');
+                container.innerHTML = `<div class="empty-state">Loading dashboard...</div>`;
+                if (!batchId) {
+                    container.innerHTML = `<div class="empty-state">Please select a batch from the Study page first.</div>`;
+                    return;
+                }
+
+                const course = AppState.data.courses.find(c => c.id === batchId);
+                const user = AppState.session.userData;
+                const completedLectures = user.completedLectures || {};
+                
+                let totalLectures = 0;
+                let completedCount = 0;
+                let totalTests = 0;
+                let attemptedTestsCount = 0;
+
+                // Calculate total lectures and completed lectures
+                const subjects = this.firebaseObjectToArray(course.subjects);
+                for (const subject of subjects) {
+                    const chapters = this.firebaseObjectToArray(subject.chapters);
+                    for (const chapter of chapters) {
+                        const contents = this.firebaseObjectToArray(chapter.content);
+                        contents.forEach(content => {
+                            if (content.type === 'video') {
+                                totalLectures++;
+                                if (completedLectures[content.id]) {
+                                    completedCount++;
+                                }
+                            }
+                            if (content.type === 'test') {
+                                totalTests++;
+                            }
+                        });
+                    }
+                }
+                
+                // Calculate attempted tests
+                const allTestsInCourse = AppState.data.tests.filter(t => t.courseId === batchId);
+                const quizResultsRef = db.ref('quizResults');
+                const userQuizResultsPromises = allTestsInCourse.map(test => 
+                    quizResultsRef.child(test.id).child(user.id).once('value')
+                );
+                
+                const resultsSnapshots = await Promise.all(userQuizResultsPromises);
+                attemptedTestsCount = resultsSnapshots.filter(snap => snap.exists()).length;
+
+                container.innerHTML = `
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <span class="icon">📚</span>
+                            <h3>Lectures</h3>
+                        </div>
+                        <div class="dashboard-stat">
+                            <span class="label">Lectures Completed</span>
+                            <span class="value">${completedCount} <span>/ ${totalLectures}</span></span>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <span class="icon">📝</span>
+                            <h3>Tests</h3>
+                        </div>
+                         <div class="dashboard-stat">
+                            <span class="label">Tests Attempted</span>
+                            <span class="value">${attemptedTestsCount} <span>/ ${totalTests}</span></span>
+                        </div>
+                    </div>
+                </div>
+                `;
             },
 
             joinLiveClass(schedule) {
@@ -4115,28 +4223,24 @@
                 this.navigateBack();
             },
 
-            // --- NEW: Image Viewer Functions ---
             showImageViewer(src) {
                 const modal = document.getElementById('image-viewer-modal');
                 const img = document.getElementById('image-viewer-img');
                 img.src = src;
-                img.classList.remove('zoomed'); // Reset zoom state
+                img.classList.remove('zoomed');
                 modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden'; // Prevent background scroll
+                document.body.style.overflow = 'hidden';
             },
 
             hideImageViewer() {
                 const modal = document.getElementById('image-viewer-modal');
                 modal.style.display = 'none';
-                document.body.style.overflow = ''; // Restore background scroll
+                document.body.style.overflow = '';
             }
         };
-
         window.AppController = AppController;
         AppController.init();
-
-    }); 
+    });
 </script>
 </body>
 </html>
-
