@@ -2387,15 +2387,7 @@
                 }
             },
             // --- दूसरा बदलाव ---
-            bindEvents() {
-                window.addEventListener('online', this.checkOnlineStatus);
-                window.addEventListener('offline', this.checkOnlineStatus);
-                
-                document.getElementById('offline-retry-btn').addEventListener('click', () => {
-                    window.location.reload();
-                });
-
-                // --- यहाँ मुख्य बदलाव किया गया है ---
+            // --- यहाँ से कॉपी करना शुरू करें ---
                 document.getElementById('offline-downloads-btn').addEventListener('click', () => {
                     document.getElementById('offline-screen').classList.add('hidden');
                     // ऐप के मुख्य हिस्सों को दिखाएँ
@@ -2419,6 +2411,7 @@
                     if(footer) footer.style.display = 'none';
                     document.getElementById('main-app-container').style.paddingBottom = '0';
                 });
+                // --- यहाँ तक कॉपी करें ---
 
                 window.addEventListener('pagehide', () => {
                     const activePage = document.querySelector('.page.active');
@@ -4131,3 +4124,4 @@
 </script>
 </body>
 </html>
+
