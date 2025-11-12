@@ -3722,6 +3722,8 @@
                     return;
                 }
                 container.innerHTML = downloads.map(item => {
+                    // --- यहाँ मुख्य बदलाव किया गया है ---
+                    // अब 'View' बटन ऐप के अंदर ही वीडियो प्लेयर या PDF व्यूअर खोलेगा
                     const viewButtonAction = item.type === 'video'
                         ? `AppController.showVideoPlayerPage(JSON.parse(this.closest('.download-item').dataset.item))`
                         : `AppController.showPdfViewer(JSON.parse(this.closest('.download-item').dataset.item).url, '${item.title}')`;
