@@ -2386,6 +2386,7 @@
                     UI.applySettings();
                 }
             },
+            // --- दूसरा बदलाव ---
             bindEvents() {
                 window.addEventListener('online', this.checkOnlineStatus);
                 window.addEventListener('offline', this.checkOnlineStatus);
@@ -2393,16 +2394,30 @@
                 document.getElementById('offline-retry-btn').addEventListener('click', () => {
                     window.location.reload();
                 });
+
+                // --- यहाँ मुख्य बदलाव किया गया है ---
                 document.getElementById('offline-downloads-btn').addEventListener('click', () => {
                     document.getElementById('offline-screen').classList.add('hidden');
-                    if (AppState.session.currentUser) {
-                        document.getElementById('auth-container').style.display = 'none';
-                        document.getElementById('main-app-container').style.display = 'block';
-                        this.navigateToPage('page-downloads');
-                    } else {
-                        // **नया बदलाव:** अगर यूज़र लॉग इन नहीं है तो ऑफ़लाइन पेज पर ही रहें
-                        alert("Please go online and log in to access your downloads.");
+                    // ऐप के मुख्य हिस्सों को दिखाएँ
+                    document.getElementById('auth-container').style.display = 'none';
+                    document.getElementById('main-app-container').style.display = 'block';
+                    
+                    // सभी पेज से 'active' क्लास हटाएँ
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                    
+                    const downloadsPage = document.getElementById('page-downloads');
+                    if (downloadsPage) {
+                        downloadsPage.classList.add('active');
+                        // अब यह फंक्शन बिना लोडिंग के तुरंत चलेगा और ऑफ़लाइन काम करेगा
+                        this.renderDownloadsPage(); 
                     }
+                    
+                    // हेडर और फुटर को छिपाएँ ताकि सिर्फ डाउनलोड पेज दिखे
+                    const header = document.querySelector('.app-header');
+                    const footer = document.querySelector('.bottom-nav');
+                    if(header) header.style.display = 'none';
+                    if(footer) footer.style.display = 'none';
+                    document.getElementById('main-app-container').style.paddingBottom = '0';
                 });
 
                 window.addEventListener('pagehide', () => {
@@ -3714,7 +3729,7 @@
                 });
             },
 
-            renderDownloadsPage() {
+                renderDownloadsPage() {
                 const container = document.getElementById('downloads-list-container');
                 let downloads = JSON.parse(localStorage.getItem('offlineDownloads')) || [];
                 if (downloads.length === 0) {
@@ -3723,10 +3738,11 @@
                 }
                 container.innerHTML = downloads.map(item => {
                     // --- यहाँ मुख्य बदलाव किया गया है ---
-                    // अब 'View' बटन ऐप के अंदर ही वीडियो प्लेयर या PDF व्यूअर खोलेगा
                     const viewButtonAction = item.type === 'video'
+                        // वीडियो ऐप के अंदर ही प्ले होगा
                         ? `AppController.showVideoPlayerPage(JSON.parse(this.closest('.download-item').dataset.item))`
-                        : `AppController.showPdfViewer(JSON.parse(this.closest('.download-item').dataset.item).url, '${item.title}')`;
+                        // PDF अब बाहर डिफ़ॉल्ट ऐप में खुलेगा
+                        : `window.open(JSON.parse(this.closest('.download-item').dataset.item).url, '_blank')`;
 
                     return `
                     <div class="download-item" data-item='${JSON.stringify(item)}'>
@@ -3747,9 +3763,7 @@
                         if (!itemToRemove) return;
 
                         const userConfirmed = await UI.showConfirmationModal(
-                            'Remove Download',
-                            'Are you sure you want to remove this download?',
-                            'Remove'
+                            'Remove Download', 'Are you sure you want to remove this download?', 'Remove'
                         );
 
                         if (userConfirmed) {
@@ -3762,8 +3776,6 @@
                             currentDownloads = currentDownloads.filter(d => d.id !== idToRemove);
                             localStorage.setItem('offlineDownloads', JSON.stringify(currentDownloads));
                             this.renderDownloadsPage();
-                            const activePage = document.querySelector('.page.active');
-                            if(activePage) this.loadPageContent(activePage.id);
                         }
                     });
                 });
