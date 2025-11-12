@@ -1491,28 +1491,21 @@
     </div>
 
 <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDJitQrBXpT4nnG1uBDrgBhRf05JNrO0yI",
+        authDomain: "apna-study-apna-group.firebaseapp.com",
+        databaseURL: "https://apna-study-apna-group-default-rtdb.firebaseio.com",
+        projectId: "apna-study-apna-group",
+        storageBucket: "apna-study-apna-group.appspot.com",
+        messagingSenderId: "875071837925",
+        appId: "1:875071837925:web:101e87217ca8c39fb6a60c"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+    const storage = firebase.storage();
+
     document.addEventListener('DOMContentLoaded', () => {
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJitQrBXpT4nnG1uBDrgBhRf05JNrO0yI",
-            authDomain: "apna-study-apna-group.firebaseapp.com",
-            databaseURL: "https://apna-study-apna-group-default-rtdb.firebaseio.com",
-            projectId: "apna-study-apna-group",
-            storageBucket: "apna-study-apna-group.appspot.com",
-            messagingSenderId: "875071837925",
-            appId: "1:875071837925:web:101e87217ca8c39fb6a60c"
-        };
-        
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-
-        const auth = firebase.auth();
-        const db = firebase.database();
-        const storage = firebase.storage();
-        
-        // --- REMOVED SERVICE WORKER REGISTRATION ---
-
         const AppState = {
             data: { courses: null, settings: {}, mcqs: [], tests: [], pdfs: [], leaderboard: [], schedules: {} },
             session: { currentUser: null, userData: null },
@@ -1782,7 +1775,7 @@
                 if (currentFilter !== 'all') {
                     filteredList = list.filter(item => item.class == currentFilter);
                 }
-                const downloadedPdfs = JSON.parse(localStorage.getItem('downloadedPdfs')) || {};
+                 const downloadedPdfs = JSON.parse(localStorage.getItem('downloadedPdfs')) || {};
 
                 if (!filteredList || filteredList.length === 0) {
                     container.innerHTML = `<div class="empty-state">No PDFs found for the selected filter.</div>`;
@@ -1930,7 +1923,6 @@
                                             <p class="content-meta">TEST • ${item.date || 'N/A'}</p>
                                             <h4 class="content-title">${item.title}</h4>
                                             <div class="content-actions">
-
                                                 <button class="content-action-btn watch start-course-test-btn">
                                                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path></svg>
                                                     Start Test
@@ -2257,7 +2249,7 @@
                         return `
                         <div class="${rankClass}">
                             <div class="quiz-rank-number">${rank}</div>
-                            <div class="quiz-rank-user-name">${result.userName || 'Anonymous User'}</div>
+                            <div class="quiz-rank-user-name">${result.userName}</div>
                             <div class="quiz-rank-score">${result.score}/${result.total}</div>
                         </div>
                         `;
@@ -2272,7 +2264,7 @@
                             <p>Score: ${currentUserData.score}/${currentUserData.total}</p>
                         </div>`;
                     } else {
-                        userRankHtml = `<div class="your-rank-highlight"><p>You haven't attempted this test yet.</p></div>`;
+                        userRankHtml = `<div class="empty-state" style="padding: 20px;">You haven't taken this test yet.</div>`;
                     }
                     
                     container.innerHTML = userRankHtml + rankListHtml;
@@ -2472,7 +2464,9 @@
             },
 
             checkOnlineStatus() {
-                // This function is no longer critical but can be kept for future use.
+                if (!navigator.onLine) {
+                   // You can optionally show a small toast/banner here if needed
+                }
             },
             loadInitialData() {
                 db.ref('courses').on('value', s => { AppState.data.courses = this.firebaseObjectToArray(s.val()); this.refreshUI(); });
@@ -2604,14 +2598,12 @@
                 });
                 
                 document.body.addEventListener('click', e => {
-                    // **FIXED DOWNLOAD LOGIC**
                     const downloadBtn = e.target.closest('.download-btn');
                     if (downloadBtn) {
-                        // We DO NOT call e.preventDefault() here.
-                        // This allows the browser's default download behavior.
+                        // REMOVED e.preventDefault() to allow native download
                         const item = JSON.parse(downloadBtn.dataset.item);
                         this.handleDirectDownload(item, downloadBtn);
-                        // The function will run, but the click will proceed to download the file.
+                        // No return here, let the default 'a' tag behavior proceed
                     }
 
                     // --- The rest of the click events ---
@@ -2642,11 +2634,10 @@
                     const pdfViewerBtn = e.target.closest('.pdf-viewer-btn');
                     if(pdfViewerBtn) { e.preventDefault(); const url = pdfViewerBtn.dataset.url; const title = pdfViewerBtn.dataset.title; this.showPdfViewer(url, title); return; }
                     const watchBtn = e.target.closest('.video-watch-btn');
-                    if (watchBtn) { e.preventDefault(); const itemData = JSON.parse(watchBtn.closest('.content-card-wrapper').dataset.item); this.showVideoPlayerPage(itemData); return; }
+                    if (watchBtn) { const itemData = JSON.parse(watchBtn.closest('.content-card-wrapper').dataset.item); this.showVideoPlayerPage(itemData); return; }
                     
                     const startCourseTestBtn = e.target.closest('.start-course-test-btn');
                     if (startCourseTestBtn) {
-                        e.preventDefault();
                         const itemWrapper = startCourseTestBtn.closest('.content-card-wrapper');
                         const itemData = JSON.parse(itemWrapper.dataset.item);
                         this.startQuiz('test', itemWrapper.dataset.id, 'course', itemData.questions, itemData.title);
@@ -3005,7 +2996,6 @@
                     textarea.style.height = 'auto';
                     textarea.style.height = (textarea.scrollHeight) + 'px';
                 });
-                // FIX 3: Scroll input into view on focus
                 textarea.addEventListener('focus', () => {
                     setTimeout(() => {
                         const formContainer = document.querySelector('#page-contact-us .chat-form-container');
@@ -3565,6 +3555,7 @@
             showBuyNowPage(courseId) { const course = AppState.data.courses.find(c => c.id === courseId); if (!course) { alert('Error: Course not found.'); return; } this.navigateToPage('page-buy-now'); UI.renderBuyNowPage(course); },
             showChaptersPage(courseId, subjectId, subjectTitle) { this.navigateToPage('page-chapters'); UI.renderChapters(courseId, subjectId, subjectTitle); },
             showLecturesPage(courseId, subjectId, chapterId, chapterTitle) { this.navigateToPage('page-lectures'); UI.renderLectures(courseId, subjectId, chapterId, chapterTitle); },
+            showQuizRanksPage(quizId, quizTitle) { this.navigateToPage('page-quiz-ranks'); UI.renderQuizRanksPage(quizId, quizTitle); },
             
             showVideoPlayerPage(item) {
                 AppState.ui.commentsToShow = 5;
@@ -4250,8 +4241,7 @@
         };
         window.AppController = AppController;
         AppController.init();
-
-    }); 
+    });
 </script>
 </body>
 </html>
