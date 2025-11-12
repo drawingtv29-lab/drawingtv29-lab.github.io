@@ -495,8 +495,7 @@
         .content-action-btn:hover { background-color: #e9ecef; }
         .content-action-btn svg { width: 16px; height: 16px; }
         .content-action-btn.icon { padding: 8px; border: 1px solid #ddd; }
-        .content-action-btn.downloaded { background-color: var(--success-color); color: white; border-color: var(--success-color); pointer-events: none; }
-        .content-action-btn.downloaded svg { color: white !important; }
+        /* REMOVED: .downloaded state for download button as it's no longer needed */
         .content-complete-btn { position: absolute; top: 15px; right: 15px; width: 28px; height: 28px; border-radius: 50%; border: 2px solid #ccc; background: white; transition: all 0.3s; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; }
         .content-complete-btn.completed { background-color: var(--success-color); border-color: var(--success-color); color: white; pointer-events: none; }
 
@@ -560,10 +559,6 @@
         .action-circle.active .action-icon-wrapper { background-color: var(--primary-color); }
         .action-circle.active .action-icon-wrapper svg { color: white; }
         .action-icon-wrapper svg { width: 22px; height: 22px; color: var(--primary-color); transition: color 0.3s; }
-        .action-circle.downloaded .action-icon-wrapper { background-color: var(--success-color); }
-        .action-circle.downloaded .action-icon-wrapper svg { color: white; }
-        .download-tick { position: absolute; top: 0; right: 0; width: 16px; height: 16px; background-color: var(--card-bg); border-radius: 50%; color: var(--success-color); display: none; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; border: 1px solid #eee; }
-        .action-circle.downloaded .download-tick { display: flex; }
         .action-circle span { font-size: 0.7rem; font-weight: 500; }
         .video-input-bar { display: flex; align-items: center; gap: 10px; }
         .video-input-bar textarea { flex-grow: 1; resize: none; max-height: 80px; height: 45px; padding: 12px; border: 1px solid #ddd; border-radius: 22px; background: #f1f3f5; }
@@ -2595,9 +2590,9 @@
                     const downloadBtn = e.target.closest('.download-btn');
                     if (downloadBtn) {
                         // Let the default browser download behavior happen
-                        // The `handleDirectDownload` is no longer needed for state changes
-                        // e.preventDefault(); // This is removed to allow the download
-                        this.handleDirectDownload(null, downloadBtn);
+                        // No e.preventDefault()
+                        this.handleDirectDownload(downloadBtn);
+                        // The 'a' tag will handle the download itself.
                     }
 
                     // --- The rest of the click events ---
@@ -3589,6 +3584,7 @@
                     } else if (videoUrl.includes('youtu.be/')) {
                         videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
                     }
+                    // ...पिछला कोड यहाँ तक था
                     const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0`;
                     iframeContainer.innerHTML = `<iframe src="${embedUrl}" style="width:100%; height:100%; border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
                     iframeContainer.style.display = 'block';
@@ -3605,8 +3601,9 @@
                 } else {
                     pdfBtn.classList.add('hidden');
                 }
-                
-                downloadBtn.classList.remove('downloaded'); // Remove downloaded state
+
+                // REMOVED: downloadedVideos check
+                downloadBtn.classList.remove('downloaded');
                 downloadBtn.querySelector('span').textContent = 'Download';
                 downloadBtn.href = item.url;
                 downloadBtn.setAttribute('download', `${item.title}.mp4`);
@@ -3788,10 +3785,10 @@
                 }
             },
 
-            handleDirectDownload(item, btnElement) {
-                // This function is now simplified. The 'a' tag handles the download.
-                // We can keep it for potential future logic, but for now, it does nothing.
-                // For example, you could add analytics here.
+            handleDirectDownload(btnElement) {
+                // This function is now just for potential future use. 
+                // The primary download is handled by the browser's default behavior for the <a> tag.
+                // We keep it to avoid errors if it's called somewhere, but it does nothing.
             },
             
             showPdfViewer(url, title = 'PDF Document') {
