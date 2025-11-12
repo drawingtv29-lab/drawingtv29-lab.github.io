@@ -1775,14 +1775,13 @@
                 if (currentFilter !== 'all') {
                     filteredList = list.filter(item => item.class == currentFilter);
                 }
-                 const downloadedPdfs = JSON.parse(localStorage.getItem('downloadedPdfs')) || {};
 
                 if (!filteredList || filteredList.length === 0) {
                     container.innerHTML = `<div class="empty-state">No PDFs found for the selected filter.</div>`;
                     return;
                 }
                 container.innerHTML = `<div class="pdf-list">${filteredList.map(pdf => {
-                    const isDownloaded = downloadedPdfs[pdf.id];
+                    // REMOVED: isDownloaded check from localStorage
                     return `
                     <div class="pdf-item">
                         <div class="pdf-item-info">
@@ -1791,8 +1790,8 @@
                         </div>
                         <div class="pdf-item-actions">
                             <button class="btn btn-secondary pdf-viewer-btn" data-url="${pdf.url}" data-title="${pdf.title}">View</button>
-                            <a href="${pdf.url}" download="${pdf.title}.pdf" class="btn btn-primary download-btn ${isDownloaded ? 'downloaded' : ''}" data-item='${JSON.stringify(pdf)}'>
-                                ${isDownloaded ? 'Downloaded' : 'Download'}
+                            <a href="${pdf.url}" download="${pdf.title}.pdf" class="btn btn-primary download-btn" data-item='${JSON.stringify(pdf)}'>
+                                Download
                             </a>
                         </div>
                     </div>`
@@ -1907,9 +1906,7 @@
                     if (!contentList || contentList.length === 0) { listContainer.innerHTML = `<div class="empty-state">No content found in this chapter.</div>`; return; }
                     
                     const completedLectures = AppState.session.userData.completedLectures || {};
-                    const downloadedPdfs = JSON.parse(localStorage.getItem('downloadedPdfs')) || {};
-                    const downloadedVideos = JSON.parse(localStorage.getItem('downloadedVideos')) || {};
-
+                    
                     listContainer.innerHTML = contentList.map(item => {
                         
                         if (item.type === 'test') {
@@ -1936,13 +1933,7 @@
 
                         // --- Video and PDF rendering logic ---
                         const isCompleted = completedLectures[item.id];
-                        let isDownloaded = false;
-                        if(item.type === 'pdf') {
-                            isDownloaded = downloadedPdfs[item.id];
-                        } else if (item.type === 'video') {
-                             isDownloaded = downloadedVideos[item.id];
-                        }
-
+                        
                         let mainThumbnailHtml = '';
                         const defaultIcon = item.type === 'pdf'
                             ? `<svg viewBox="0 0 24 24" fill="currentColor" style="width: 40px; height: 40px; color: #888;"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zM18 14H13V7h5v7zM4 6H2v14c0 1.1.9 2 2 2h14v-2-H4V6z"></path></svg>`
@@ -1961,7 +1952,8 @@
                             : `<button class="content-action-btn watch pdf-viewer-btn" data-url="${item.url}" data-title="${item.title}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-2v-2h2v2zm0-4h-2v-2h2v2zm-4-4h-2V6h2v2z"></path></svg> View PDF</button>`;
 
                         const downloadFilename = item.type === 'video' ? `${item.title}.mp4` : `${item.title}.pdf`;
-                        const downloadAction = `<a href="${item.url}" download="${downloadFilename}" class="content-action-btn icon download-btn ${isDownloaded ? 'downloaded' : ''}" title="Download" data-item='${JSON.stringify(item)}'><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></svg></a>`;
+                        // REMOVED: isDownloaded check and class
+                        const downloadAction = `<a href="${item.url}" download="${downloadFilename}" class="content-action-btn icon download-btn" title="Download" data-item='${JSON.stringify(item)}'><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></svg></a>`;
                         const notesAction = item.notesUrl ? `<button class="content-action-btn icon pdf-viewer-btn" title="View Notes" data-url="${item.notesUrl}" data-title="Notes: ${item.title}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-2v-2h2v2zm0-4h-2v-2h2v2zm-4-4h-2V6h2v2z"></path></svg></button>` : '';
                         
                         return `
@@ -2119,7 +2111,7 @@
                 if (AppState.session.currentUser) {
                     const resultData = {
                         userId: AppState.session.currentUser.uid,
-                        userName: AppState.session.userData.name,
+                        userName: (AppState.session.userData.name || 'Anonymous User'), // MODIFIED: Added fallback
                         score: correctAnswers,
                         total: totalQuestions,
                         timestamp: firebase.database.ServerValue.TIMESTAMP
@@ -2223,9 +2215,10 @@
                 document.getElementById('quiz-ranks-title').textContent = `${quizTitle} Ranks`;
                 container.innerHTML = `<div class="empty-state">Loading ranks...</div>`;
 
-                db.ref(`quizResults/${quizId}`).orderByChild('score').limitToLast(50).once('value', snapshot => {
+                // MODIFIED: Changed limitToLast(50) to limitToLast(10)
+                db.ref(`quizResults/${quizId}`).orderByChild('score').limitToLast(10).once('value', snapshot => {
                     if (!snapshot.exists()) {
-                        container.innerHTML = `<div class="empty-state">No one has taken this test yet.</div>`;
+                        container.innerHTML = `<div class="empty-state">No one has taken this test yet. Be the first!</div>`;
                         return;
                     }
 
@@ -2234,8 +2227,9 @@
                     const currentUserId = AppState.session.currentUser.uid;
                     let currentUserRank = -1;
                     let currentUserData = null;
-
-                    const rankListHtml = sortedResults.map((result, index) => {
+                    
+                    // MODIFIED: Added .slice(0, 10) to ensure only top 10 are shown
+                    const rankListHtml = sortedResults.slice(0, 10).map((result, index) => {
                         const rank = index + 1;
                         const isCurrentUser = result.userId === currentUserId;
                         if (isCurrentUser) {
@@ -2264,7 +2258,7 @@
                             <p>Score: ${currentUserData.score}/${currentUserData.total}</p>
                         </div>`;
                     } else {
-                        userRankHtml = `<div class="empty-state" style="padding: 20px;">You haven't taken this test yet.</div>`;
+                        userRankHtml = `<div class="empty-state" style="padding: 20px;">You are not in the Top 10. Keep trying!</div>`;
                     }
                     
                     container.innerHTML = userRankHtml + rankListHtml;
@@ -2600,10 +2594,10 @@
                 document.body.addEventListener('click', e => {
                     const downloadBtn = e.target.closest('.download-btn');
                     if (downloadBtn) {
-                        // REMOVED e.preventDefault() to allow native download
-                        const item = JSON.parse(downloadBtn.dataset.item);
-                        this.handleDirectDownload(item, downloadBtn);
-                        // No return here, let the default 'a' tag behavior proceed
+                        // Let the default browser download behavior happen
+                        // The `handleDirectDownload` is no longer needed for state changes
+                        // e.preventDefault(); // This is removed to allow the download
+                        this.handleDirectDownload(null, downloadBtn);
                     }
 
                     // --- The rest of the click events ---
@@ -3611,15 +3605,9 @@
                 } else {
                     pdfBtn.classList.add('hidden');
                 }
-
-                const downloadedVideos = JSON.parse(localStorage.getItem('downloadedVideos')) || {};
-                if(downloadedVideos[item.id]){
-                    downloadBtn.classList.add('downloaded');
-                    downloadBtn.querySelector('span').textContent = 'Downloaded';
-                } else {
-                    downloadBtn.classList.remove('downloaded');
-                    downloadBtn.querySelector('span').textContent = 'Download';
-                }
+                
+                downloadBtn.classList.remove('downloaded'); // Remove downloaded state
+                downloadBtn.querySelector('span').textContent = 'Download';
                 downloadBtn.href = item.url;
                 downloadBtn.setAttribute('download', `${item.title}.mp4`);
                 downloadBtn.dataset.item = JSON.stringify(item);
@@ -3801,18 +3789,9 @@
             },
 
             handleDirectDownload(item, btnElement) {
-                if (!item || !item.url) return;
-                
-                const storageKey = item.type === 'video' ? 'downloadedVideos' : 'downloadedPdfs';
-                let downloads = JSON.parse(localStorage.getItem(storageKey)) || {};
-                
-                if (!downloads[item.id]) {
-                    downloads[item.id] = true;
-                    localStorage.setItem(storageKey, JSON.stringify(downloads));
-                    this.updateUserXP(20); // Give 20 XP for first download
-                    btnElement.classList.add('downloaded');
-                    if (btnElement.tagName === 'A') btnElement.textContent = 'Downloaded';
-                }
+                // This function is now simplified. The 'a' tag handles the download.
+                // We can keep it for potential future logic, but for now, it does nothing.
+                // For example, you could add analytics here.
             },
             
             showPdfViewer(url, title = 'PDF Document') {
