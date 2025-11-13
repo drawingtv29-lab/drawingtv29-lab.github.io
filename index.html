@@ -2102,17 +2102,35 @@
                     AppController.updateUserXP(xpGained);
                 }
 
-                // Store the result for ranking
-                if (AppState.session.currentUser) {
+                // --- यहाँ से महत्वपूर्ण बदलाव शुरू होते हैं ---
+
+                // 1. सबसे पहले जांचें कि यूज़र लॉग इन है या नहीं
+                if (AppState.session.currentUser && AppState.session.userData) {
                     const resultData = {
                         userId: AppState.session.currentUser.uid,
-                        userName: (AppState.session.userData.name || 'Anonymous User'), // MODIFIED: Added fallback
+                        userName: (AppState.session.userData.name || 'Anonymous User'),
                         score: correctAnswers,
                         total: totalQuestions,
                         timestamp: firebase.database.ServerValue.TIMESTAMP
                     };
-                    db.ref(`quizResults/${AppState.quiz.id}/${AppState.session.currentUser.uid}`).set(resultData);
+                    
+                    // 2. रिजल्ट सेव करने की कोशिश करें और देखें कि कोई एरर तो नहीं आता
+                    db.ref(`quizResults/${AppState.quiz.id}/${AppState.session.currentUser.uid}`).set(resultData)
+                        .then(() => {
+                            // यह मैसेज सिर्फ टेस्टिंग के लिए है, बाद में आप इसे हटा सकते हैं
+                            console.log("Result saved successfully in the database!"); 
+                        })
+                        .catch(error => {
+                            // अगर रिजल्ट सेव करते समय कोई एरर आता है, तो उसे दिखाएँ
+                            alert("Error saving result: " + error.message);
+                            console.error("Firebase write error: ", error);
+                        });
+                } else {
+                    // अगर यूज़र लॉग इन नहीं है, तो यह चेतावनी दिखाएँ
+                    alert("Could not save your score. It seems you are not logged in. Please restart the app and try again.");
                 }
+
+                // --- यहाँ तक बदलाव थे, बाकी का कोड वही रहेगा ---
 
                 const correctPercentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
                 const incorrectPercentage = 100 - correctPercentage;
