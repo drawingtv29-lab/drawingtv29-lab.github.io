@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apna Study Apna Group - Professional</title>
+    
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Theme Color for browsers -->
+    <meta name="theme-color" content="#0052D4">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -3786,9 +3792,7 @@
             },
 
             handleDirectDownload(btnElement) {
-                // This function is now just for potential future use. 
-                // The primary download is handled by the browser's default behavior for the <a> tag.
-                // We keep it to avoid errors if it's called somewhere, but it does nothing.
+                // This function is now just for potential future use.
             },
             
             showPdfViewer(url, title = 'PDF Document') {
@@ -4218,6 +4222,17 @@
         window.AppController = AppController;
         AppController.init();
     });
+</script>
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+            .then(function(registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(function(error) {
+                console.log('Service Worker registration failed:', error);
+            });
+    }
 </script>
 </body>
 </html>
