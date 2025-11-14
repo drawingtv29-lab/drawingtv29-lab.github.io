@@ -3874,8 +3874,11 @@
             
             showPdfViewer(url, title = 'PDF Document') {
                 if (!url) return;
+                
+                const viewerUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;
+                
                 document.getElementById('pdf-viewer-title').textContent = title;
-                document.getElementById('pdf-viewer-iframe').src = url;
+                document.getElementById('pdf-viewer-iframe').src = viewerUrl;
                 document.getElementById('pdf-download-link').href = url;
                 document.getElementById('pdf-download-link').setAttribute('download', `${title}.pdf`);
                 this.navigateToPage('page-pdf-viewer');
@@ -4300,3 +4303,4 @@
 </script>
 </body>
 </html>
+
