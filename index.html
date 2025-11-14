@@ -1850,7 +1850,7 @@
                             <p>Class: ${pdf.class || 'N/A'} • Subject: ${pdf.subject || 'N/A'}</p>
                         </div>
                         <div class="pdf-item-actions">
-                            <button class="btn btn-secondary pdf-viewer-btn" data-url="${pdf.url}" data-title="${pdf.title}">View</button>
+                            <button class="btn btn-secondary" onclick="AppController.showPdfViewer('${pdf.url}', '${pdf.title.replace(/'/g, "\\'")}')">View</button>
                             <a href="${pdf.url}" download="${pdf.title}.pdf" class="btn btn-primary download-btn" data-item='${JSON.stringify(pdf)}'>
                                 Download
                             </a>
@@ -4303,4 +4303,5 @@
 </script>
 </body>
 </html>
+
 
