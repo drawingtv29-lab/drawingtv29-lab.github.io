@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apna Study Apna Group - Professional</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- === PWA CODE START === -->
+    <link rel="manifest" href="manifest.json">
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("pwabuilder-sw.js");
+        }
+    </script>
+    <!-- === PWA CODE END === -->
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -2010,7 +2020,7 @@
                         
                         const watchAction = item.type === 'video'
                             ? `<button class="content-action-btn watch video-watch-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg> Watch</button>`
-                            : `<button class="content-action-btn watch pdf-viewer-btn" data-url="${item.url}" data-title="${item.title}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-2v-2h2v2zm0-4h-2v-2h2v2zm-4-4h-2V6h2v2z"></path></svg> View PDF</button>`;
+                            : `<button class="content-action-btn watch" onclick="AppController.showPdfViewer('${item.url}', '${item.title.replace(/'/g, "\\'")}')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-2v-2h2v2zm0-4h-2v-2h2v2zm-4-4h-2V6h2v2z"></path></svg> View PDF</button>`;
 
                         const downloadFilename = item.type === 'video' ? `${item.title}.mp4` : `${item.title}.pdf`;
                         const downloadAction = `<a href="${item.url}" download="${downloadFilename}" class="content-action-btn icon download-btn" title="Download" data-item='${JSON.stringify(item)}'><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></svg></a>`;
@@ -2702,8 +2712,6 @@
                         return; 
                     }
                     
-                    const pdfViewerBtn = e.target.closest('.pdf-viewer-btn');
-                    if(pdfViewerBtn) { e.preventDefault(); const url = pdfViewerBtn.dataset.url; const title = pdfViewerBtn.dataset.title; this.showPdfViewer(url, title); return; }
                     const watchBtn = e.target.closest('.video-watch-btn');
                     if (watchBtn) { const itemData = JSON.parse(watchBtn.closest('.content-card-wrapper').dataset.item); this.showVideoPlayerPage(itemData); return; }
                     
@@ -3923,7 +3931,6 @@
                 UI.renderQuiz(); 
             },
 
-            // --- NEW/MODIFIED FUNCTIONS FOR STUDY & DASHBOARD ---
             renderHeaderXP() {
                 const xpDisplay = document.getElementById('header-xp-display');
                 if (xpDisplay && AppState.session.userData) {
@@ -4303,5 +4310,3 @@
 </script>
 </body>
 </html>
-
-
