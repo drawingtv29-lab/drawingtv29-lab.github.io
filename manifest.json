@@ -1,21 +1,17 @@
 {
-  "name": "Apna Study Apna Group",
-  "short_name": "ApnaStudy",
-  "start_url": "/",
-  "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0052D4",
-  "description": "Your ultimate study partner for smart learning and success.",
-  "icons": [
-    {
-      "src": "images/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "images/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "ASAG",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "ASAG",
+  "start_url": "/",
+  "theme_color": "#0052d4",
+  "description": "The ultimate learning app for JAC Board students (Class 9 &amp; 10) with PYQs, Model Papers, Notes, and Syllabus.",
+  "lang": "en",
+  "categories": [
+    "books",
+    "education"
   ]
 }
