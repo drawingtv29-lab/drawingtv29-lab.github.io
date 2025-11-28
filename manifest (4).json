@@ -1,0 +1,16 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "ASAG",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "ASAG",
+  "start_url": "https://drawingtv29-lab.github.io/",
+  "theme_color": "#0052d4",
+  "description": "The ultimate learning app for JAC Board students (Class 9 &amp;amp; 10) with PYQs, Model Papers, Notes, and Syllabus.",
+  "lang": "en",
+  "categories": [
+    "education"
+  ]
+}
