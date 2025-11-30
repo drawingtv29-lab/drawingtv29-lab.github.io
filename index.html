@@ -6,14 +6,13 @@
     <title>Apna Study Apna Group - Professional</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- === PWA CODE START === -->
+    <!-- PWA Manifest & Service Worker -->
     <link rel="manifest" href="manifest.json">
     <script>
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("pwabuilder-sw.js");
         }
     </script>
-    <!-- === PWA CODE END === -->
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -154,7 +153,7 @@
             display: flex; align-items: center; background-color: var(--card-bg); 
             border-radius: var(--border-radius); padding: 10px 15px; 
             box-shadow: var(--shadow); cursor: pointer; transition: all 0.3s;
-            border: 2px solid var(--primary-color); /* Added blue border */
+            border: 2px solid var(--primary-color);
         }
         .top-search-bar:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
         .top-search-bar input { border: none; outline: none; background: transparent; width: 100%; font-size: 1rem; color: var(--text-color); pointer-events: none; }
@@ -394,6 +393,16 @@
         .quiz-list-item { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: var(--card-bg); border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 15px; cursor: pointer; }
         .quiz-question-card { background: var(--card-bg); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 20px; }
         .quiz-question-text { font-size: 1.1rem; font-weight: 500; margin-bottom: 20px; }
+        
+        .quiz-question-image {
+            max-width: 100%;
+            max-height: 250px;
+            display: block;
+            margin: 0 auto 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
         .quiz-options { list-style: none; }
         .quiz-option { 
             position: relative; 
@@ -437,6 +446,21 @@
             content: '✖';
             color: white;
         }
+        #quiz-feedback .explanation-text {
+            font-weight: normal;
+            font-size: 0.9rem;
+            text-align: left;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            margin-top: 10px;
+            color: #333;
+        }
+        [data-theme="dark"] #quiz-feedback .explanation-text {
+            background-color: #333;
+            color: #eee;
+        }
+        
         .quiz-navigation { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
 
         /* --- New Quiz Result Card (MODIFIED) --- */
@@ -2024,7 +2048,7 @@
 
                         const downloadFilename = item.type === 'video' ? `${item.title}.mp4` : `${item.title}.pdf`;
                         const downloadAction = `<a href="${item.url}" download="${downloadFilename}" class="content-action-btn icon download-btn" title="Download" data-item='${JSON.stringify(item)}'><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></svg></a>`;
-                        const notesAction = item.notesUrl ? `<button class="content-action-btn icon pdf-viewer-btn" title="View Notes" data-url="${item.notesUrl}" data-title="Notes: ${item.title}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-2v-2h2v2zm0-4h-2v-2h2v2zm-4-4h-2V6h2v2z"></path></svg></button>` : '';
+                        const notesAction = item.notesUrl ? `<button class="content-action-btn icon" onclick="AppController.showPdfViewer('${item.notesUrl}', 'Notes: ${item.title.replace(/'/g, "\\'")}')" title="View Notes"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-2v-2h2v2zm0-4h-2v-2h2v2zm-4-4h-2V6h2v2z"></path></svg></button>` : '';
                         
                         return `
                         <div class="content-card-wrapper" data-type="${item.type}" data-item='${JSON.stringify(item)}'>
@@ -2132,7 +2156,25 @@
                     container.innerHTML = `<div class="empty-state">This set has no questions.</div><button class="btn btn-secondary" onclick="AppController.loadPageContent('page-${type}')">Go Back</button>`; return; 
                 } 
                 const q = questions[currentIndex]; 
-                const questionKey = currentIndex; 
+                const questionKey = currentIndex;
+                
+                let questionContentHtml = '';
+                const questionText = q.question || '';
+                if (questionText.startsWith('http') && (questionText.endsWith('.jpg') || questionText.endsWith('.jpeg') || questionText.endsWith('.png') || questionText.endsWith('.gif'))) {
+                    questionContentHtml = `<img src="${questionText}" class="quiz-question-image" alt="Question Image">`;
+                } else {
+                    questionContentHtml = `<h3 class="quiz-question-text">${questionText}</h3>`;
+                }
+                
+                let feedbackHtml = '';
+                if (isSubmitted[questionKey] && userAnswers[questionKey] !== q.options[q.answer]) {
+                    if(q.explanation && q.explanation.trim() !== '') {
+                        feedbackHtml = `<div class="explanation-text"><b>Explanation:</b><br>${q.explanation}</div>`;
+                    } else {
+                        feedbackHtml = `Correct Answer: ${q.options[q.answer]}`;
+                    }
+                }
+
                 const optionsHtml = Object.values(q.options).map(optionText => { 
                     let optClass = 'quiz-option'; 
                     if (isSubmitted[questionKey]) { 
@@ -2150,11 +2192,11 @@
                 container.innerHTML = `
                     <div class="quiz-question-card">
                         <p style="opacity: 0.8; margin-bottom: 10px;">Question ${currentIndex + 1} of ${questions.length}</p>
-                        <h3 class="quiz-question-text">${q.question}</h3>
+                        ${questionContentHtml}
                         <ul class="quiz-options">${optionsHtml}</ul>
                     </div>
                     <div id="quiz-feedback" class="empty-state" style="padding:10px 20px; font-weight: bold; min-height: 24px;">
-                        ${isSubmitted[questionKey] && userAnswers[questionKey] !== q.options[q.answer] ? `Correct Answer: ${q.options[q.answer]}` : ''}
+                        ${feedbackHtml}
                     </div>
                     <button class="btn btn-primary" id="quiz-submit-btn" style="width:100%;" ${isSubmitted[questionKey] ? 'disabled' : ''}>Submit</button>
                     <div class="quiz-navigation">
@@ -2177,7 +2219,6 @@
                     AppController.updateUserXP(xpGained);
                 }
 
-                // Store the result for ranking
                 if (AppState.session.currentUser) {
                     const resultData = {
                         userId: AppState.session.currentUser.uid,
@@ -2512,6 +2553,24 @@
                 this.loadInitialData(); this.bindEvents();
             },
 
+            uploadFileForUser(file) {
+                return new Promise((resolve, reject) => {
+                    const userId = AppState.session.currentUser.uid;
+                    const storageRef = storage.ref(`profile_pictures/${userId}/${Date.now()}_${file.name}`);
+                    const uploadTask = storageRef.put(file);
+
+                    uploadTask.on('state_changed', 
+                        (snapshot) => { /* Can be used to show progress */ }, 
+                        (error) => { reject(error); }, 
+                        () => {
+                            uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+                                resolve(downloadURL);
+                            });
+                        }
+                    );
+                });
+            },
+
             handleUserDataUpdate(oldData, newData) {
                 AppState.session.userData = newData;
                 
@@ -2688,7 +2747,7 @@
                         // Let the default browser download behavior happen
                     }
 
-                    const contentArea = e.target.closest('.detail-content, #page-about-us');
+                    const contentArea = e.target.closest('.detail-content, #page-about-us, .quiz-question-image');
                     if (e.target.tagName === 'IMG' && contentArea && !e.target.closest('.course-thumbnail')) {
                         e.preventDefault();
                         this.showImageViewer(e.target.src);
